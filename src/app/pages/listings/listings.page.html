@@ -1,0 +1,337 @@
+
+<ion-modal id="listing-filter-modal" #modal trigger="filter-modal">
+    <ng-template>
+        <div class="wrapper">
+
+            <div class="filter-header ion-flex ion-justify-content-between ion-align-items-center">
+                <div class="filter-heading">Filters</div>
+                <div class="close" (click)="modal.dismiss()">
+                    <ion-icon name="close-outline"></ion-icon>
+                </div>
+            </div>
+
+            <br />
+
+            <div class="form-container">
+                <form [formGroup]="form" (ngSubmit)="submitForm()" novalidate>
+                    <ion-radio-group formControlName="listing_type" class="round-3">
+                        <div class="custom-item" (click)="setListingType('buy')"
+                            [ngClass]="{'active': form.value.listing_type == 'buy'}">
+                            <ion-radio slot="start" value="buy" class="ion-opacity-0"></ion-radio>
+                            <label>Sale</label>
+                        </div>
+                        <div class="custom-item" (click)="setListingType('rent')"
+                            [ngClass]="{'active': form.value.listing_type == 'rent'}">
+                            <ion-radio slot="start" value="rent" class="ion-opacity-0"></ion-radio>
+                            <label>Rent</label>
+
+                        </div>
+
+                        <div class="custom-item" (click)="setListingType('Rent, Buy')"
+                            [ngClass]="{'active': form.value.listing_type == 'Rent, Buy'}">
+                            <ion-radio slot="start" value="Rent, Buy" class="ion-opacity-0"></ion-radio>
+                            <label>
+                                Rent & Sale
+                            </label>
+                        </div>
+                    </ion-radio-group>
+                    <br />
+                    <ion-item class="">
+                        <ion-input placeholder="Search by keyword or flypp id" formControlName="title" (input)="updateTitle($event)" (change)="fetchlist()" type="text"></ion-input>
+                    </ion-item>
+
+                    <ion-accordion-group>
+                        <ion-accordion value="price">
+                            <ion-item slot="header" lines="none">
+                                <ion-label>Price</ion-label>
+                            </ion-item>
+                            <div class="ion-padding input-inner" slot="content">
+
+                                <div class="ion-flex ion-justify-content-between">
+                                    <ion-item class="">
+                                        <ion-input placeholder="Min Price" formControlName="min_price"
+                                            (ionChange)="update_rent_price($event)" type="number"
+                                            step="any"></ion-input>
+                                        <ion-label color="medium">bhat</ion-label>
+                                    </ion-item>
+                                    <ion-item class="" style="margin-left: 15px;">
+                                        <ion-input placeholder="Max Price" formControlName="max_price"
+                                            (ionChange)="update_sale_price($event)" type="number"
+                                            step="any"></ion-input>
+                                        <ion-label color="medium">bhat</ion-label>
+                                    </ion-item>
+                                </div>
+
+                            </div>
+                        </ion-accordion>
+                        <ion-accordion value="first">
+                            <ion-item slot="header" lines="none">
+                                <ion-label>Property Type</ion-label>
+                            </ion-item>
+                            <div class="ion-padding input-inner" slot="content">
+
+                                <ion-list lines="none">
+                                    <ion-item>
+                                        <ion-label>All</ion-label>
+                                        <ion-checkbox slot="start" color="success" value="all"
+                                            [checked]="house_type_all_checked" (click)="setHouseType('all')">
+                                        </ion-checkbox>
+                                    </ion-item>
+
+                                    <ion-item *ngFor="let ht of house_type_lists" (click)="setHouseType(ht.name)">
+                                        <ion-label>{{ht.name}}</ion-label>
+                                        <ion-checkbox slot="start" color="success" [checked]="isCheckedHouseType(ht.name)"
+                                            [value]="ht.name">
+                                        </ion-checkbox>
+                                    </ion-item>
+
+
+                                </ion-list>
+
+                            </div>
+                        </ion-accordion>
+                        <ion-accordion value="second">
+                            <ion-item slot="header" lines="none">
+                                <ion-label>Bedrooms</ion-label>
+                            </ion-item>
+                            <div class="ion-padding" slot="content">
+                                <ion-list lines="none">
+                                    <ion-item *ngFor="let bd of bed_list">
+                                        <ion-label>{{bd.name}}</ion-label>
+                                        <ion-checkbox slot="start" color="success" [checked]="isCheckedBed(bd.name)"
+                                            [value]="bd.name" (ionChange)="setBed(bd.name)">
+                                        </ion-checkbox>
+                                    </ion-item>
+                                </ion-list>
+                            </div>
+                        </ion-accordion>
+                        <ion-accordion value="third">
+                            <ion-item slot="header" lines="none">
+                                <ion-label>Bathrooms</ion-label>
+                            </ion-item>
+                            <div class="ion-padding" slot="content">
+                                <ion-list lines="none">
+                                    <ion-item *ngFor="let bath of bath_list">
+                                        <ion-label>{{bath.name}}</ion-label>
+                                        <ion-checkbox slot="start" color="success" [checked]="isCheckedBath(bath.name)"
+                                            [value]="bath.name" (ionChange)="setBath(bath.name)">
+                                        </ion-checkbox>
+                                    </ion-item>
+                                </ion-list>
+                            </div>
+                        </ion-accordion>
+
+                        <ion-accordion value="four">
+                            <ion-item slot="header" lines="none">
+                                <ion-label>Features</ion-label>
+                            </ion-item>
+                            <div class="ion-padding" slot="content">
+                                <ion-list lines="none">
+                                    <ion-item *ngFor="let fe of features_list">
+                                        <ion-label>{{fe.name}}</ion-label>
+                                        <ion-checkbox slot="start" color="success" [checked]="isCheckedFeature(fe.name)"
+                                            [value]="fe.name" (ionChange)="setFeature(fe.name)">
+                                        </ion-checkbox>
+                                    </ion-item>
+                                </ion-list>
+                            </div>
+                        </ion-accordion>
+
+                        <ion-accordion value="more">
+                            <ion-item slot="header" lines="none">
+                                <ion-label>More Filters</ion-label>
+                            </ion-item>
+                            <div class="ion-padding" slot="content">
+                                <div class="ion-flex ion-justify-content-between">
+                                    <ion-item class="">
+                                        <ion-input placeholder="Min Sqm" formControlName="sqm_min"
+                                            (ionChange)="update_min_sqm($event)" type="number"
+                                            step="any"></ion-input>
+                                        <ion-label color="medium">m<sup>2</sup></ion-label>
+                                    </ion-item>
+                                    <ion-item class="" style="margin-left: 15px;">
+                                        <ion-input placeholder="Max Sqm" formControlName="sqm_max"
+                                            (ionChange)="update_max_sqm($event)" type="number"
+                                            step="any"></ion-input>
+                                        <ion-label color="medium">m<sup>2</sup></ion-label>
+                                    </ion-item>
+                                </div>
+                            </div>
+                        </ion-accordion>
+
+                    </ion-accordion-group>
+
+
+                </form>
+            </div>
+
+
+
+        </div>
+    </ng-template>
+</ion-modal>
+<ion-content scrollEvents="true" appAddClassToHeader>
+    <app-header class="white-header" ></app-header>
+
+    <div class="ion-flex dashboard-design">
+        <div class="dashboard-white">
+
+            <div class="ion-flex ion-align-items-center ion-justify-content-between">
+                <h4>My Listings</h4>
+                <div class="filter" id="filter-content">
+                    <ion-buttons slot="start" class="ion-margin-end">
+                        <ion-button id="filter-modal" color="success">
+                            <ion-icon name="options-outline"></ion-icon> Filters
+                        </ion-button>
+                    </ion-buttons>
+                    <ion-button color="success" [routerLink]="['/app/listings/add']" routerDirection="root" shape="round" class="success-custom-btn">Create Listing</ion-button>
+                </div>
+            </div>
+
+            <br />
+            <br />
+            <table class="table custom-table">
+                <thead>
+                    <tr>
+                        <th>Listing</th>
+                        <th>Type</th>
+                        <th class="ion-text-center">Price</th>
+                        <th class="ion-text-center">Beds</th>
+                        <th class="ion-text-center">Baths</th>
+                        <th class="ion-text-center">m<sup>2</sup></th>
+                        <th class="ion-text-center">Status</th>
+                        <th class="ion-text-center">Duration</th>
+                    </tr>
+                </thead>
+                <ng-container *ngIf="!is_searching; else loadingBlock">
+                    <tbody *ngIf="lists && lists.length > 0">
+                        <tr class="item-row"
+                            *ngFor="let item of lists| paginate: { itemsPerPage: limit, currentPage: p, totalItems: total }">
+                            <td style="width: 200px;">
+                                <a routerLink="/app/listings/view/{{item.id}}">
+                                    <div class="ion-flex ion-align-items-center listing-td">
+                                        <div class="image">
+                                            <img [src]="item.featured" alt="" />
+                                        </div>
+                                        <div class="listing-info">
+                                            <h5>{{item.name}}</h5>
+                                            <p>
+                                                <span>MSP-{{item.id}}</span>
+                                                <span *ngIf="item.province"> | {{item.province}}</span>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </a>
+
+                            </td>
+                            <td class="listing-type">
+                                <h5>{{item.prop_type | titlecase }}</h5>
+                                <p>{{item.house_type}}</p>
+                            </td>
+                            <td class="ion-text-center">
+                                <span *ngIf="item.prop_type === 'Sale' && item.sale_price">
+                                    ฿{{item.sale_price}}
+                                </span>
+                                <span *ngIf="item.prop_type === 'sale' && item.sale_price">
+                                    ฿{{item.sale_price}}
+                                </span>
+                                <span *ngIf="item.prop_type === 'Rent' && item.rent_price">
+                                    ฿{{item.rent_price}}/month
+                                </span>
+                                <span *ngIf="item.prop_type === 'rent' && item.rent_price">
+                                    ฿{{item.rent_price}}/month
+                                </span>
+                                <span *ngIf="item.prop_type == 'Rent, Sale'">
+                                    <span *ngIf="item.sale_price">
+                                        ฿{{item.sale_price}}
+                                    </span>
+                                    <span *ngIf="item.rent_price">
+                                        - ฿{{item.rent_price}}/month
+                                    </span>
+                                </span>
+                            </td>
+                            <td class="ion-text-center"><ion-text>{{item.bed}}</ion-text></td>
+                            <td class="ion-text-center"><ion-text>{{item.bath}}</ion-text></td>
+                            <td class="ion-text-center"><ion-text>{{item.sqm}}</ion-text></td>
+                            <td class="ion-text-center">
+                                <ion-select [ngClass]="statusClass(item.status)" (ionChange)="statusChange($event, item.id)"
+                                    placeholder="Select Status" [value]="item.status" style="min-width: 60px;">
+                                    <ion-select-option [value]="sts.id"
+                                        *ngFor="let sts of statuses">{{sts.name}}</ion-select-option>
+                                </ion-select>
+                            </td>
+                            <td class="ion-text-center last-column">
+                                <span class="duration">
+                                    <ion-icon name="time-outline"></ion-icon> {{item.duration}}
+                                </span>
+
+                                <a class="action-edit" routerLink="/app/listings/edit/{{item.id}}"
+                                    routerDirection="root">
+                                    <ion-icon name="pencil-sharp" appRemoveIconTitle></ion-icon>
+                                </a>
+
+                            </td>
+                        </tr>
+                    </tbody>
+                    <tbody *ngIf="lists && lists.length === 0">
+                        <tr class="item-row">
+                            <td colspan="8" style="padding-left: 0">
+                                <p style="color: gray; font-family: 'GTEestiProDisplay-Regular';">No results match your
+                                    search</p>
+                            </td>
+                        </tr>
+                    </tbody>
+                </ng-container>
+
+                <ng-template #loadingBlock>
+                    <tr *ngFor="let sk of skeletons">
+                        <td>
+                            <ion-skeleton-text [animated]="true" style="width: 200px;"></ion-skeleton-text>
+                        </td>
+                        <td>
+                            <ion-skeleton-text [animated]="true"></ion-skeleton-text>
+                        </td>
+                        <td>
+                            <ion-skeleton-text [animated]="true"></ion-skeleton-text>
+                        </td>
+                        <td>
+                            <ion-skeleton-text [animated]="true"></ion-skeleton-text>
+                        </td>
+                        <td>
+                            <ion-skeleton-text [animated]="true"></ion-skeleton-text>
+                        </td>
+                        <td>
+                            <ion-skeleton-text [animated]="true"></ion-skeleton-text>
+                        </td>
+                        <td>
+                            <ion-skeleton-text [animated]="true"></ion-skeleton-text>
+                        </td>
+                        <td>
+                            <ion-skeleton-text [animated]="true"></ion-skeleton-text>
+                        </td>
+                    </tr>
+                </ng-template>
+            </table>
+
+            <ion-row class="ion-align-items-center ion-justify-content-between ion-margin-top">
+                <ion-col class="ion-flex ion-justify-content-start">
+                    <pagination-controls previousLabel="Prev" nextLabel="Next" (pageChange)="pageChangeEvent($event)"
+                        *ngIf="lists && lists.length > 1">
+                    </pagination-controls>
+                </ion-col>
+                <ion-col class="ion-flex ion-justify-content-end">
+                    <div *ngIf="lists && lists.length > 0">
+                        {{p * limit - 19}} - {{p * limit}} of {{total}}
+
+                    </div>
+                </ion-col>
+
+            </ion-row>
+
+
+
+        </div>
+    </div>
+
+
+</ion-content>

@@ -1,0 +1,127 @@
+<div class="vertical-navigation-wrap">
+  <div class="vertical-navigation-inner">
+    <div class="vertical-naviation-overflow">
+      <div class="navigation-header">
+        <div class="logo-wrap">
+          <a routerLink="/app">
+            <ion-img src="/assets/flypplogogreen.svg" alt="MSP" style="height: 40px;"></ion-img>
+          </a>
+        </div>
+
+        <div class="user-avatar">
+          <ion-avatar>
+            <img [src]="auth.getUser().profile_image">
+          </ion-avatar>
+          <h4>{{auth.getUser().firstname}} {{auth.getUser().lastname}} </h4>
+          <h6>{{auth.getUser().org_name}}</h6>
+        </div>
+
+      </div>
+      <div class="navigation-links">
+
+        <ion-list lines="none">
+          <ion-item routerLink="/app" routerDirection="root" routerLinkActive="active-item" [routerLinkActiveOptions]="{exact:
+            true}">
+            <ion-img class="active" src="/assets/dashboard.png" alt="Dashboard"></ion-img>
+            <ion-img class="gray" src="/assets/dashboard-grey.png" alt="Dashboard"></ion-img>
+            <ion-label>Dashboard</ion-label>
+          </ion-item>
+
+          <ion-item routerLink="/app/listings" routerDirection="root" routerLinkActive="active-item">
+            <ion-img class="active" src="/assets/listings.png" alt="Listings"></ion-img>
+            <ion-img class="gray" src="/assets/listings-grey.png" alt="Listings"></ion-img>
+            <ion-label>Listings</ion-label>
+          </ion-item>
+
+          
+          <ion-item (click)="toggleLeadDropdown()">
+            <ion-img class="active" src="/assets/leads.png" alt="Leads"></ion-img>
+            <ion-img class="gray" src="/assets/leads-grey.png" alt="Leads"></ion-img>
+            <ion-label>Leads</ion-label>
+          </ion-item>
+
+          <ion-menu-toggle class="custom-dropdown-menu" auto-hide="false" *ngIf="isLeadMenu">
+            <ion-list lines="none" class="ion-no-padding">
+              <ion-item [routerLink]="['/app/leads']" class="ion-no-padding" (click)="hideToggle()">
+                <ion-icon name="chevron-forward-outline"></ion-icon>
+                <ion-label>Buyer</ion-label>
+              </ion-item>
+              <ion-item [routerLink]="['/app/leads-seller']" class="ion-no-padding" (click)="hideToggle()">
+                <ion-icon name="chevron-forward-outline"></ion-icon>
+                <ion-label>Seller</ion-label>
+              </ion-item>
+            </ion-list>
+          </ion-menu-toggle>
+
+          <ion-item routerLink="/app/showings" routerDirection="root" routerLinkActive="active-item">
+            <ion-img class="active" src="/assets/showings.png" alt="Showings"></ion-img>
+            <ion-img class="gray" src="/assets/showings-grey.png" alt="Showings"></ion-img>
+            <ion-label>Showings</ion-label>
+          </ion-item>
+
+          <ion-item routerLink="/app/tasks" routerDirection="root" routerLinkActive="active-item">
+            <ion-img class="active" src="/assets/task.png" alt="Tasks"></ion-img>
+            <ion-img class="gray" src="/assets/task-grey.png" alt="Tasks"></ion-img>
+            <ion-label>Tasks</ion-label>
+          </ion-item>
+
+          <ion-item (click)="toggleDropdown()" *ngIf="is_admin">
+            <ion-img class="active" src="/assets/settings.png" alt="Settings"></ion-img>
+            <ion-img class="gray" src="/assets/settings-grey.png" alt="Settings"></ion-img>
+            <ion-label>Settings</ion-label>
+          </ion-item>
+
+          <ion-menu-toggle class="custom-dropdown-menu" auto-hide="false" *ngIf="isOpenMenu">
+            <ion-list lines="none" class="ion-no-padding">
+              <ion-item [routerLink]="['/app/users']" class="ion-no-padding" (click)="hideToggle()">
+                <ion-icon name="chevron-forward-outline"></ion-icon>
+                <ion-label>Users</ion-label>
+              </ion-item>
+              <ion-item [routerLink]="['/app/organizations']" class="ion-no-padding" (click)="hideToggle()">
+                <ion-icon name="chevron-forward-outline"></ion-icon>
+                <ion-label>Organizations</ion-label>
+                
+              </ion-item>
+            </ion-list>
+          </ion-menu-toggle>
+
+          <ion-item (click)="toggleMarketingDropdown()">
+            <ion-img class="active" src="/assets/settings.png" alt="Settings"></ion-img>
+            <ion-img class="gray" src="/assets/settings-grey.png" alt="Settings"></ion-img>
+            <ion-label>Marketing</ion-label>
+          </ion-item>
+
+          <ion-menu-toggle class="custom-dropdown-menu" auto-hide="false" *ngIf="isMarketMenu">
+            <ion-list lines="none" class="ion-no-padding">
+              <ion-item [routerLink]="['/app/marketing/my-website']" class="ion-no-padding" (click)="hideToggle()" *ngIf="auth.getUser().admin == 1 || auth.getUser().franchise_admin != false ">
+                <ion-icon name="chevron-forward-outline"></ion-icon>
+                <ion-label>My Website</ion-label>
+              </ion-item>
+              <ion-item [routerLink]="['/app/marketing/myxml']" class="ion-no-padding" (click)="hideToggle()">
+                <ion-icon name="chevron-forward-outline"></ion-icon>
+                <ion-label>My XML</ion-label>
+              </ion-item>
+              <ion-item [routerLink]="" class="ion-no-padding" (click)="hideToggle()">
+                <ion-icon name="chevron-forward-outline"></ion-icon>
+                <ion-label>Agent Link</ion-label>
+              </ion-item>
+              <ion-item [routerLink]="['/app/marketing/my-flyer']" class="ion-no-padding" (click)="hideToggle()">
+                <ion-icon name="chevron-forward-outline"></ion-icon>
+                <ion-label>Flyers</ion-label>
+              </ion-item>
+              <ion-item [routerLink]="" class="ion-no-padding" (click)="hideToggle()">
+                <ion-icon name="chevron-forward-outline"></ion-icon>
+                <ion-label>Lists</ion-label>
+              </ion-item>
+            </ion-list>
+          </ion-menu-toggle>
+
+
+
+          
+        </ion-list>
+        
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,332 @@
+
+<ion-content scrollEvents="true" appAddClassToHeader>
+    <app-header class="white-header" ></app-header>
+    <div class="ion-flex dashboard-design">
+        <div class="dashboard-white">
+
+            <div class="ion-flex ion-align-items-center ion-justify-content-between">
+                <h4>My Leads</h4>
+                <div class="filter ion-flex" id="filter-content">
+                    <ion-item lines="none" style="width: 260px; max-width: 100%;">
+                        <ion-input type="text" placeholder="Search by name,email or phone
+                        number" (change)="updateTitle($event)"></ion-input>
+                    </ion-item>
+                    
+                    <ion-buttons slot="start">
+                        <ion-button id="filter-modal" (click)="listview()" [color]='{"primary":!is_grid_active, "success":is_grid_active}'>
+                            <ion-icon name="list-outline"></ion-icon>
+                        </ion-button>
+                        <ion-button id="filter-modal" (click)="gridview()" [color]='{"primary":!is_list_active, "success":is_list_active}'>
+                            <ion-icon name="grid-outline"></ion-icon>
+                        </ion-button>
+                    </ion-buttons>
+                    <ion-button color="success" (click)="addLead()" routerDirection="root" shape="round" class="success-custom-btn">Create Lead</ion-button>
+                </div>
+            </div>
+
+
+            <br />
+            <br />
+
+            <div class="grid-view" *ngIf="is_grid_active">
+                <div class="board-wrapper" *ngIf="lists && lists.length > 0;else loadingBlock">
+                    <div class="board-columns" cdkDropListGroup>
+            
+                        <div class="board-column" *ngFor="let item of lists; let mi = index;">
+                                <div class="columns column-title">
+                                        <div class="column is-10">{{item.status.name}}</div>
+                                </div>
+                                <div class="leads-container miniscrollbar"
+                                cdkDropList
+                                [cdkDropListData]="item.leads"
+                                (cdkDropListDropped)="drop($event)">
+                                    <div class="overflow-y-scroll" *ngIf="item.leads && item.leads.length > 0">
+                                        <div cdkDrag class="lead-card" *ngFor="let lead of item.leads; let i = index">
+                                            <div class="lead-card-inner">
+    
+                                                <div class="ion-flex ion-align-items-center ion-justify-content-between lead-avatar-info ">
+                                                    
+                                                    <a class="listing-avatar" routerLink="/app/leads/view/{{lead.id}}">
+                                                        <img [src]="lead.listing_image" alt="" />
+                                                        <div class="same-lead" *ngIf="lead.same_lead">
+                                                            +{{lead.same_lead}}
+                                                        </div>
+                                                    </a>
+                                                    
+                                                    <div class="connect-btn" *ngIf="lead.prop_type != ''">
+                                                        <ion-button [ngClass]="{'green': lead.prop_type == 'Sale', 'blue': lead.prop_type != 'Sale'}" size="small" shape="round">
+                                                            
+                                                            {{lead.prop_type}}
+                                                        </ion-button>
+                                                    </div>
+                                                </div>
+                                                <a routerLink="/app/leads/view/{{lead.id}}">
+                                                    {{lead.lead_name}}
+                                                </a>
+                                                <div class="lead-info" *ngIf="lead.description == ''">
+                                                    <a class="lead-name" routerLink="/app/leads/view/{{lead.id}}">
+                                                        <ion-text>Please contact me regarding this listing.</ion-text>
+                                                    </a>
+                                                </div>
+                                                <div class="lead-info" *ngIf="lead.description != ''">
+                                                    <a class="lead-name" routerLink="/app/leads/view/{{lead.id}}">
+                                                        <ion-text>{{lead.description}}</ion-text>
+                                                    </a>
+                                                </div>
+                                                <div class="ion-flex ion-align-items-center ion-justify-content-between lead-info ion-margin-top ">
+                                                    <div class="user-avatar" [title]="lead.staff_name">
+                                                        <img [src]="lead.userimg" alt="" />
+                                                    </div>
+                                                    <div class="lead-time">
+    
+                                                        <div class="h-dots">
+                                                            <ion-icon name="ellipsis-horizontal-outline" (click)="openPopup(lead)"></ion-icon>
+    
+                                                            <ion-menu-toggle class="custom-small-menu" auto-hide="false" *ngIf="lead.is_open">
+                                                                <ion-list lines="none" class="ion-no-padding">
+                                                                  <ion-item href="tel:{{lead.phonenumber}}" class="ion-no-padding">
+                                                                    {{lead.phonenumber}}
+                                                                  </ion-item>
+                                                                  <ion-item href="mailto:{{lead.email}}" class="ion-no-padding">
+                                                                    {{lead.email}}
+                                                                  </ion-item>
+                                                                </ion-list>
+                                                              </ion-menu-toggle>
+    
+                                                        </div>
+    
+                                                        <div class="duration">
+                                                            <ion-icon name="time-outline"></ion-icon> {{lead.time}}
+                                                        </div>
+                                                        <!-- <div class="strips-band" *ngIf="lead.status == 1">
+                                                            <span class="bar active"></span>
+                                                            <span class="bar active"></span>
+                                                            <span class="bar active"></span>
+                                                            <span class="bar active"></span>
+                                                            <span class="bar active"></span>
+                                                            <span class="bar active"></span>
+                                                        </div>
+                                                        <div class="strips-band" *ngIf="lead.status == 2">
+                                                            <span class="bar active"></span>
+                                                            <span class="bar"></span>
+                                                            <span class="bar"></span>
+                                                            <span class="bar"></span>
+                                                            <span class="bar"></span>
+                                                            <span class="bar"></span>
+                                                        </div>
+                                                        <div class="strips-band" *ngIf="lead.status == 3">
+                                                            <span class="bar active"></span>
+                                                            <span class="bar active"></span>
+                                                            <span class="bar"></span>
+                                                            <span class="bar"></span>
+                                                            <span class="bar"></span>
+                                                            <span class="bar"></span>
+                                                        </div>
+                                                        <div class="strips-band" *ngIf="lead.status == 4">
+                                                            <span class="bar active"></span>
+                                                            <span class="bar active"></span>
+                                                            <span class="bar active"></span>
+                                                            <span class="bar active"></span>
+                                                            <span class="bar"></span>
+                                                            <span class="bar"></span>
+                                                        </div>
+                                                        <div class="strips-band" *ngIf="lead.status == 6">
+                                                            <span class="bar active"></span>
+                                                            <span class="bar active"></span>
+                                                            <span class="bar active"></span>
+                                                            <span class="bar"></span>
+                                                            <span class="bar"></span>
+                                                            <span class="bar"></span>
+                                                        </div>
+                                                        <div class="strips-band" *ngIf="lead.status == 7">
+                                                            <span class="bar active"></span>
+                                                            <span class="bar active"></span>
+                                                            <span class="bar active"></span>
+                                                            <span class="bar active"></span>
+                                                            <span class="bar active"></span>
+                                                            <span class="bar"></span>
+                                                        </div> -->
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+    
+                                        <ion-button size="small" color="primary" expand="full" (click)="loadMore(item.status.id)" [disabled]="is_loading">Load More</ion-button>
+                                        
+    
+                                    </div>
+                                </div>
+                            </div>
+                    </div>
+                </div>
+                <ng-template class="board-wrapper skeleton" #loadingBlock>
+                    <div class="board-columns" cdkDropListGroup>
+            
+                        <div class="board-column" *ngFor="let item of skeletons">
+                                <div class="columns column-title">
+                                        <div class="column is-10"><ion-skeleton-text [animated]="true"></ion-skeleton-text></div>
+                                </div>
+                                <div class="leads-container"
+                                cdkDropList
+                                [cdkDropListData]="item.leads">
+                                    <div class="overflow-y-scroll" *ngIf="item.leads && item.leads.length > 0">
+                                        <div cdkDrag class="lead-card" *ngFor="let lead of item.leads">
+                                            <div class="lead-card-inner">
+    
+                                                <div class="ion-flex ion-align-items-center ion-justify-content-between lead-avatar-info ">
+                                                    <div class="listing-avatar">
+                                                        <ion-thumbnail slot="start">
+                                                            <ion-skeleton-text [animated]="true"></ion-skeleton-text>
+                                                        </ion-thumbnail>
+                                                    </div>
+                                                    <div class="connect-btn">
+                                                        
+                                                        
+                                                    </div>
+                                                </div>
+                                                <br />
+                                                <ion-skeleton-text [animated]="true"></ion-skeleton-text>
+    
+                                                <div class="ion-flex ion-align-items-center ion-justify-content-between lead-info ">
+                                                    <div class="lead-name">
+                                                        <ion-skeleton-text [animated]="true"></ion-skeleton-text>
+                                                    </div>
+                                                    <div class="lead-time">
+                                                        <div class="duration">
+                                                            <ion-skeleton-text [animated]="true"></ion-skeleton-text>
+                                                        </div>
+                                                        
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+    
+                                        
+                                        
+    
+                                    </div>
+                                </div>
+                            </div>
+                    </div>
+                </ng-template>
+            </div>
+
+            <!-- list view start here -->
+
+            <div class="list-view" *ngIf="is_list_active">
+
+                <table class="table custom-table">
+                    <thead>
+                        <tr>
+                            <th>Listing Image</th>
+                            <th>Name</th>
+                            <th>Phone</th>
+                            <th>Email</th>
+                            <th class="ion-text-center">Status</th>
+                            <th class="ion-text-center">Duration</th>
+                        </tr>
+                    </thead>
+                    <ng-container *ngIf="!is_searching; else loadingBlockList">
+                        <tbody *ngIf="listsViewRes && listsViewRes.length > 0">
+                            <tr class="item-row"
+                                *ngFor="let item of listsViewRes| paginate: { itemsPerPage: limit, currentPage: p, totalItems: total }">
+                                <td style="width: 200px;">
+                                    <a routerLink="/app/leads/view/{{item.id}}">
+                                        <div class="ion-flex ion-align-items-center listing-td">
+                                            <div class="image" *ngIf="item.listing_image">
+                                                <img [src]="item.listing_image" alt="" />
+                                            </div>
+                                        </div>
+                                    </a>
+    
+                                </td>
+                                
+                                <td><ion-text>{{item.name}}</ion-text></td>
+                                <td><ion-text>{{item.phonenumber}}</ion-text></td>
+                                <td><ion-text>{{item.email}}</ion-text></td>
+                                <td class="ion-text-center">
+                                    <ion-select [ngClass]="statusClass(item.status)" (ionChange)="statusChange($event, item.id)"
+                                        placeholder="Select Status" [value]="item.status">
+                                        <ion-select-option [value]="sts.id"
+                                            *ngFor="let sts of leadStatuses">{{sts.name}}</ion-select-option>
+                                    </ion-select>
+                                </td>
+                                <td class="ion-text-center last-column">
+                                    <span class="duration">
+                                        <ion-icon name="time-outline"></ion-icon> {{item.duration}}
+                                    </span>
+    
+                                    <a class="action-edit" (click)="openPopupModal(item)">
+                                        <ion-icon name="pencil-sharp" appRemoveIconTitle></ion-icon>
+                                    </a>
+    
+                                </td>
+                            </tr>
+                        </tbody>
+                        <tbody *ngIf="listsViewRes && listsViewRes.length === 0">
+                            <tr class="item-row">
+                                <td colspan="8" style="padding-left: 0">
+                                    <p style="color: gray; font-family: 'GTEestiProDisplay-Regular';">No results match your
+                                        search</p>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </ng-container>
+    
+                    <ng-template #loadingBlockList>
+                        <tr *ngFor="let sk of skeletons">
+                            <td>
+                                <ion-skeleton-text [animated]="true" style="width: 200px;"></ion-skeleton-text>
+                            </td>
+                            <td>
+                                <ion-skeleton-text [animated]="true"></ion-skeleton-text>
+                            </td>
+                            <td>
+                                <ion-skeleton-text [animated]="true"></ion-skeleton-text>
+                            </td>
+                            <td>
+                                <ion-skeleton-text [animated]="true"></ion-skeleton-text>
+                            </td>
+                            <td>
+                                <ion-skeleton-text [animated]="true"></ion-skeleton-text>
+                            </td>
+                            <td>
+                                <ion-skeleton-text [animated]="true"></ion-skeleton-text>
+                            </td>
+                            <td>
+                                <ion-skeleton-text [animated]="true"></ion-skeleton-text>
+                            </td>
+                            <td>
+                                <ion-skeleton-text [animated]="true"></ion-skeleton-text>
+                            </td>
+                        </tr>
+                    </ng-template>
+                </table>
+
+
+                <ion-row class="ion-align-items-center ion-justify-content-between ion-margin-top">
+                    <ion-col class="ion-flex ion-justify-content-start">
+                        <pagination-controls previousLabel="Prev" nextLabel="Next" (pageChange)="pageChangeEvent($event)"
+                            *ngIf="listsViewRes && listsViewRes.length > 1">
+                        </pagination-controls>
+                    </ion-col>
+                    <ion-col class="ion-flex ion-justify-content-end">
+                        <div *ngIf="listsViewRes && listsViewRes.length > 0">
+                            {{p * limit - 14}} - {{p * limit}} of {{total}}
+    
+                        </div>
+                    </ion-col>
+    
+                </ion-row>
+
+
+            </div>
+
+            
+
+        </div>
+    </div>
+        
+
+    
+</ion-content>

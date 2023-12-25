@@ -1,0 +1,780 @@
+ion-content {
+    .dashboard-design {
+        h1, h2, h3, h4, h5, h6, p, div, span, a, ion-item, ion-button {
+            font-family: 'GTEestiProDisplay-Bold';
+        }
+        .title {
+            font-size: 22px;
+            font-weight: 600;
+            color: #201f32;
+            font-family: 'GTEestiProDisplay-Bold';
+            margin-top: 40px;
+        }
+        .top-verital-line {
+            position: relative;
+        }
+        ion-icon {
+            cursor: pointer;
+        }
+        .custom-small-menu {
+            right: 0;
+            top: 20px;
+        }
+        .title-section {
+            .left-box {
+                h4 {
+                    color: #201f32;
+                }
+                p > span {
+                    color: #abadac;
+                }
+            }
+            .right-box {
+                div {
+                    span {
+                        color: #3bbfba;
+                        font-size: 14px;
+                    }
+                }
+            }
+        }
+
+        .gallery-grid-wrap {
+            position: relative;
+            margin-bottom: 30px;
+            .more-image-wrap {
+                position: absolute;
+                right: 0;
+                bottom: -21px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                .more-images {
+                    width: 130px;
+                    padding: 10px;
+                    border-radius: 20px;
+                    background: #fff;
+                    box-shadow: 0 6px 12px 0 rgba(0, 0, 0, 0.15);
+                    display: flex;
+                    align-items: center;
+                    ion-icon {
+                        margin-right: 4px;
+                    }
+                }
+                .more-images.floorplans {
+                    cursor: pointer;
+                }
+                .more-images+.more-images {
+                    margin-left: 15px;
+                }
+            }
+            
+        }
+        .ion-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            grid-column-gap: 5px;
+            margin-bottom: 15px;
+            .grid-item {
+                height: 140px;
+                img {
+                    height: 100%;
+                    object-fit: cover;
+                    width: 100%;
+                }
+            }
+            .grid-item-main {
+                height: 285px;
+                grid-area: 1 / 1 / 5 / 3;
+            }
+        }
+
+        .prop-sale {
+            font-size: 14px;
+            color: #beaf87;
+        }
+        .mb-20 {
+            margin-bottom: 20px;
+            
+        }
+        .right-box {
+            div {
+                span {
+                    color: #201f32;
+                    font-size: 20px;
+                }
+            }
+        }
+        .bed-bath-info {
+            .ion-flex {
+                span {
+                    font-size: 14px;
+                    font-family: "GTEestiProDisplay-Regular", "arial", sans-serif;
+                }
+                
+            }
+            .icon {
+                width: 30px;
+                height: 30px;
+                margin-right: 8px;
+                svg {
+                    width: 30px;
+                    height: 30px;
+                    
+                }
+            }
+        }
+        .small-box-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            gap: 15px;
+            width: 100%;
+            .item-box {
+                background-color: #fff;
+                border-radius: 6px;
+                width: 100%;
+                height: 80px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                .num {
+                    font-size: 14px;
+                    font-weight: 600;
+                    text-align: center;
+                }
+                .symbol {
+                    font-size: 13px;
+                    font-weight: 600;
+                    text-align: center;
+                }
+            }
+        }
+
+        .lead-section {
+            .lead-overflow {
+                max-height: 300px;
+                overflow-y: auto;
+                overflow-x: hidden;
+            }
+            .ion-flex {
+                padding: 8px 10px;
+                background-color: #f9f5f0;
+                border-radius: 10px;
+                .lead-name {
+                    color: #201f32;
+                }
+                .lead-status {
+                    span {
+                        color: #abadac;
+                        font-size: 13px;
+                    }
+                    span+span {
+                        margin-left: 5px;
+                    }
+                }
+                .website {
+                    display: -webkit-box;
+                    -webkit-line-clamp: 1;
+                    -webkit-box-orient: vertical;  
+                    overflow: hidden;
+                    color: #777;
+                }
+            }
+            .ion-flex+.ion-flex {
+                margin-top: 10px;
+            }
+            ion-button {
+                font-size: 12px;
+                --background-hover: transparent;
+            }
+        }
+        .features-section {
+            .features {
+                flex-wrap: wrap;
+                gap: 10px 40px;
+            }
+            
+        }
+
+        .listing-agent-wrap {
+            position: relative;
+            .swiper-button-prevs {
+                position: absolute;
+                top: 56%;
+                z-index: 2;
+                left: -6%;
+                ion-icon {
+                    font-size: 40px;
+                    color: #777;
+                }
+            }
+            .swiper-button-nexts {
+                position: absolute;
+                z-index: 2;
+                top: 56%;
+                right: 45%;
+                ion-icon {
+                    font-size: 40px;
+                    color: #777;
+                }
+            }
+            ion-slides {
+                max-width: 280px;
+                margin-left: 0;
+            }
+            .listing-agent-box {
+                display: flex;
+                flex-direction: column;
+                width: 280px !important;
+                background-color: rgb(255, 255, 255);
+                box-shadow: rgb(0 0 0 / 10%) 0px 3px 6px 0px;
+                border-radius: 12px;
+                user-select: none;
+                min-height: 200px;
+                max-width: 280px;
+                .agent-inner {
+                    display: block;
+                    flex: 1 1 0%;
+                    width: 100%;
+                    user-select: none;
+                    -webkit-user-drag: none;
+                    -webkit-tap-highlight-color: transparent;
+                    .agent-header {
+                        height: 50px;
+                        border-radius: 12px 12px 2px 2px;
+                        padding: 16px;
+                        position: relative;
+                        display: flex;
+                        background-color: rgb(242, 241, 238);
+                        color: rgb(255, 255, 255);
+                        stroke: rgb(255, 255, 255);
+                        border-bottom: 1px solid rgb(233, 236, 241);
+                        user-select: none;
+                        .usr-info {
+                            display: flex;
+                            width: 60px;
+                            height: 60px;
+                            background-color: rgb(255, 255, 255);
+                            border-radius: 50%;
+                            .org {
+                                position: absolute;
+                                right: 10px;
+                                color: #222;
+                            }
+                            img {
+                                width: 60px;
+                                height: 60px;
+                                border-radius: 50%;
+                                border: 1px solid rgb(255, 255, 255);
+                            }
+                        }
+                    }
+                    .agent-body {
+                        padding: 30px 16px;
+                        text-align: left;
+                        .name {
+                            font-size: 14px;
+                            
+                        }
+                        div {
+                            margin-bottom: 5px;
+                            font-weight: 600;
+                        }
+                    }
+                }
+                .agent-footer {
+                    display: flex;
+                    padding: 0px 16px 16px;
+                    font-size: 14px !important;
+                }
+            }
+        }
+
+        
+    }
+}
+ion-select.blue {
+    background: rgb(66, 64, 222);
+    border-radius: 20px;
+    color: #fff;
+    padding: 5px 12px;
+    margin-left: 20px;
+}
+
+ion-select.green {
+    background: #00ccc2;
+    border-radius: 20px;
+    color: #fff;
+    padding: 5px 12px;
+    margin-left: 20px;
+}
+.color-green {
+    color: #00ccc2 !important;
+}
+.heading {
+    font-size: 30px;
+}
+.ion-grid-features {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+ion-modal {
+    .title {
+        display: block;
+        font-size: 20px;
+        text-align: center;
+        margin-bottom: 20px;
+    }
+    ion-textarea {
+        background-color: #f5f5f5;
+        margin-top: 0;
+        color: #222;
+        font-size: 16px;
+        font-weight: 600;
+        font-family: 'GTEestiProDisplay-Bold';
+        &:hover, &:focus {
+            .float-text {
+                opacity: 1;
+            }
+            border: 0;
+            outline: 0;
+        }
+        &::placeholder {
+            font-weight: normal;
+            color: #d3d3d3;
+        }
+    }
+    .ion-color-medium {
+        --ion-color-contrast: unset !important;
+    }
+    .color-input {
+        margin-top: 20px;
+    }
+}
+.notes-wrap {
+    position: relative;
+    max-height: 350px;
+    overflow-y: auto;
+    .notes-loop {
+        p {
+            margin: 0;
+            margin-bottom: 3px;
+        }
+        .note-content {
+            div {
+                color: #777;
+                font-size: 12px;
+            }
+        }
+        .ion-flex {
+            ion-icon {
+                font-size: 14px;
+            }
+        }
+    }
+    .notes-loop+.notes-loop {
+        margin-top: 5px;
+        padding-top: 5px;
+        border-top: 1px solid #eee;
+    }
+
+}
+
+.feature-box {
+    position: relative;
+    display: block;
+    margin-top: 30px;
+    margin-bottom: 10px;
+    padding-top: 10px;
+    input {
+        display: none;
+    }
+    label {
+        position: relative;
+        cursor: pointer;
+        font-size: 11px;
+    }
+    .feature-name {
+        position: absolute;
+        top: -20px;
+        left: 50px;
+    }
+    .custom {
+        &:before {
+            
+            width: 34px;
+            height: 34px;
+            content: "";
+            position: absolute;
+            left: 0;
+            top: -40px;
+        }
+    }
+    .swimming-pool {
+        &:before {
+            background: url('/assets/features-icons/swimming-pool.png');
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: cover;
+        }
+    }
+    .swimming-pool-select {
+        &:before {
+            background: url('/assets/features-icons/swimming-pool-select.png');
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: cover;
+        }
+    }
+    .sauna {
+        &:before {
+            background: url('/assets/features-icons/sauna.png');
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: cover;
+        }
+    }
+    .sauna-select {
+        &:before {
+            background: url('/assets/features-icons/sauna-select.png');
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: cover;
+        }
+    }
+
+    .cctv {
+        &:before {
+            background: url('/assets/features-icons/cctv.png');
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: cover;
+        }
+    }
+    .cctv-select {
+        &:before {
+            background: url('/assets/features-icons/cctv-select.png');
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: cover;
+        }
+    }
+
+    .hr-security {
+        &:before {
+            background: url('/assets/features-icons/hr-security.png');
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: cover;
+        }
+    }
+    .hr-security-select {
+        &:before {
+            background: url('/assets/features-icons/hr-security-select.png');
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: cover;
+        }
+    }
+
+    .fitness {
+        &:before {
+            background: url('/assets/features-icons/fitness.png');
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: cover;
+        }
+    }
+    .fitness-select {
+        &:before {
+            background: url('/assets/features-icons/fitness-select.png');
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: cover;
+        }
+    }
+
+    .library {
+        &:before {
+            background: url('/assets/features-icons/fitness.png');
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: cover;
+        }
+    }
+    .library-select {
+        &:before {
+            background: url('/assets/features-icons/library-select.png');
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: cover;
+        }
+    }
+
+    .balcony {
+        &:before {
+            background: url('/assets/features-icons/balcony.png');
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: cover;
+        }
+    }
+    .balcony-select {
+        &:before {
+            background: url('/assets/features-icons/balcony-select.png');
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: cover;
+        }
+    }
+
+    .city-view {
+        &:before {
+            background: url('/assets/features-icons/city-view.png');
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: cover;
+        }
+    }
+    .city-view-select {
+        &:before {
+            background: url('/assets/features-icons/city-view-select.png');
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: cover;
+        }
+    }
+
+    .sea-view {
+        &:before {
+            background: url('/assets/features-icons/sea-view.png');
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: cover;
+        }
+    }
+    .sea-view-select {
+        &:before {
+            background: url('/assets/features-icons/sea-view-select.png');
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: cover;
+        }
+    }
+
+    .mountain-view {
+        &:before {
+            background: url('/assets/features-icons/mountain-view.png');
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: cover;
+        }
+    }
+    .mountain-view-select {
+        &:before {
+            background: url('/assets/features-icons/mountain-view-select.png');
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: cover;
+        }
+    }
+
+    .roof-terrace {
+        &:before {
+            background: url('/assets/features-icons/roof-terrace.png');
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: cover;
+        }
+    }
+    .roof-terrace-select {
+        &:before {
+            background: url('/assets/features-icons/roof-terrace-select.png');
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: cover;
+        }
+    }
+
+    .parking {
+        &:before {
+            background: url('/assets/features-icons/parking.png');
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: cover;
+        }
+    }
+    .parking-select {
+        &:before {
+            background: url('/assets/features-icons/parking-select.png');
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: cover;
+        }
+    }
+
+    .garden {
+        &:before {
+            background: url('/assets/features-icons/garden.png');
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: cover;
+        }
+    }
+    .garden-select {
+        &:before {
+            background: url('/assets/features-icons/garden-select.png');
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: cover;
+        }
+    }
+
+    .laundry-room {
+        &:before {
+            background: url('/assets/features-icons/laundry-room.png');
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: cover;
+        }
+    }
+    .laundry-room-select {
+        &:before {
+            background: url('/assets/features-icons/laundry-room-select.png');
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: cover;
+        }
+    }
+
+    .playground {
+        &:before {
+            background: url('/assets/features-icons/playground.png');
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: cover;
+        }
+    }
+    .playground-select {
+        &:before {
+            background: url('/assets/features-icons/playground-select.png');
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: cover;
+        }
+    }
+
+    .tennis-court {
+        &:before {
+            background: url('/assets/features-icons/tennis-court.png');
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: cover;
+        }
+    }
+    .tennis-court-select {
+        &:before {
+            background: url('/assets/features-icons/tennis-court-select.png');
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: cover;
+        }
+    }
+
+    .public-wifi {
+        &:before {
+            background: url('/assets/features-icons/public-wifi.png');
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: cover;
+        }
+    }
+    .public-wifi-select {
+        &:before {
+            background: url('/assets/features-icons/public-wifi-select.png');
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: cover;
+        }
+    }
+
+    .jacuzzi {
+        &:before {
+            background: url('/assets/features-icons/jacuzzi.png');
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: cover;
+        }
+    }
+    .jacuzzi-select {
+        &:before {
+            background: url('/assets/features-icons/jacuzzi-select.png');
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: cover;
+        }
+    }
+    
+    .pet-friendly {
+        &:before {
+            background: url('/assets/features-icons/pet-friendly.png');
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: cover;
+        }
+    }
+    .pet-friendly-select {
+        &:before {
+            background: url('/assets/features-icons/pet-friendly-select.png');
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: cover;
+        }
+    }
+
+    .intercom-select {
+        &:before {
+            background: url('/assets/features-icons/intercom-select.svg');
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: cover;
+        }
+    }
+    .furnished-select {
+        &:before {
+            background: url('/assets/features-icons/furnished-select.svg');
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: cover;
+        }
+    }
+    .dishwasher-select {
+        &:before {
+            background: url('/assets/features-icons/dishwasher-select.svg');
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: cover;
+        }
+    }
+    .solar-panels-select {
+        &:before {
+            background: url('/assets/features-icons/solar-panels-select.svg');
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: cover;
+        }
+    }
+    .air-conditioning-select {
+        &:before {
+            background: url('/assets/features-icons/air-conditioning-select.svg');
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: cover;
+        }
+    }
+    
+
+}
+app-header {
+    background-image: linear-gradient(to right, transparent 57.15%, #fff 42%);
+}

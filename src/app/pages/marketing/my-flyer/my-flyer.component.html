@@ -1,0 +1,181 @@
+<ion-content scrollEvents="true" appAddClassToHeader>
+  <app-header class="splitted-header reduce-width"></app-header>
+
+  <div class="ion-flex dashboard-design">
+    <div class="flex-left dashboard-left w-less">
+      <div class="ion-flex ion-align-items-center ion-justify-content-between">
+        <h4>Create a flyer</h4>
+      </div>
+      <br />
+
+      <form [formGroup]="form" (ngSubmit)="submitForm()">
+
+        <div class="ion-position-relative">
+          <ion-input (input)="searchProperties($event)" formControlName="property_list"
+            placeholder="Search listings by ID or name..."></ion-input>
+
+          <div class="multi-level-menu-wrap" [ngClass]="{'open': isToggleSearchBox }">
+            <div class="menu" *ngIf="properties && properties.length > 0;else noPropeties">
+              <div class="parent" *ngFor="let prop of properties" (click)="selectProp(prop)">#{{prop.id}} -
+                {{prop.name}}</div>
+            </div>
+            <ng-template #noPropeties>
+              <div id="menu">
+                <div class="parent">No properties found</div>
+              </div>
+            </ng-template>
+          </div>
+          <br />
+          <div class="property-sent-selection-wrap" *ngIf="selectedGallery && selectedGallery.length > 0">
+            <h5>Featured Image</h5>
+            <div class="files-grid">
+              <div class="file-box" *ngFor="let file of selectedGallery; let i = index"
+                (click)="selectImage(file)">
+                <img [src]="file['url']" alt="" />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <ion-label>Title</ion-label>
+        <ion-input formControlName="title" (input)="updateTitle($event)"></ion-input>
+
+        <ion-label>Description</ion-label>
+        <ion-textarea formControlName="description" rows="5" (input)="updateText($event)" autosize ></ion-textarea>
+
+        <div class="ion-position-relative">
+          <ion-label>Contact Agent</ion-label>
+          <ion-input formControlName="agent" (input)="searchStaff($event)"
+            placeholder="Search by name or id"></ion-input>
+          <div class="multi-level-menu-wrap" [ngClass]="{'open': isToggleStaffBox }" style="margin-top: 18px;">
+            <div class="menu" *ngIf="stafflist && stafflist.length > 0;else noStaff">
+              <div class="parent" *ngFor="let staff of stafflist" (click)="selectStaff(staff)">#{{staff.id}} -
+                {{staff.name}} - {{staff.email}}</div>
+            </div>
+            <ng-template #noStaff>
+              <div id="menu">
+                <div class="parent">No staff found</div>
+              </div>
+            </ng-template>
+          </div>
+        </div>
+        <br />
+        <ion-label slot="start">Show Qrcode</ion-label>
+        <ion-checkbox formControlName="is_qrcode" (ionChange)="showQrCode()"></ion-checkbox>
+
+
+        <br />
+
+
+
+      </form>
+
+    </div>
+    <div class="flex-right dashboard-right w-more">
+
+
+      <div class="pdf-preview ion-position-relative ion-margin-bottom">
+        <h5>Preview</h5>
+        <div class="preview-box" *ngIf="selectedProperty && selectedImage">
+
+          <div class="download" (click)="downloadFlayer()"><ion-icon name="download-outline"></ion-icon></div>
+
+          <div class="banner">
+            <img [src]="selectedImage.url" alt="" />
+          </div>
+          <br />
+
+          <div class="middle-info">
+            <div class="leftbox w-35">
+              <h4>{{selectedProperty.name}}</h4>
+              <div class="address">{{selectedProperty.district}} {{selectedProperty.province}}</div>
+              <div class="prop-info">
+                <span *ngIf="selectedProperty.bed">
+                  <svg id="icon-bed" viewBox="0 0 24 24">
+                    <g stroke="#222" stroke-width="1.5" fill="none" fill-rule="evenodd">
+                      <path d="M2.25 14.3h19.5m-19.5 3h19.5"></path>
+                      <path
+                        d="M5.838 4.5h12.324c.325 0 .588.263.588.588V9h0-13.5V5.088c0-.325.263-.588.588-.588zM5.25 9l-3 5.25v5.25m19.5 0v-5.25l-3-5.25"
+                        stroke-linecap="round" stroke-linejoin="round"></path>
+                    </g>
+                  </svg>
+                  {{selectedProperty.bed}}
+                </span>
+                <span *ngIf="selectedProperty.bath">
+                  <svg id="icon-bath" viewBox="0 0 24 24">
+                    <g fill-rule="nonzero" fill="none">
+                      <path
+                        d="M21.75 11.19c0-.746-.718-.682-1.601-.682H4.937v-5.2c0-.598.487-1.085 1.086-1.085h.284c.295 0 .572.12.774.324l-.048.048a2.076 2.076 0 000 2.934l.274.275a.619.619 0 00.877 0l2.712-2.71a.62.62 0 000-.876l-.274-.275a2.064 2.064 0 00-1.469-.607c-.424 0-.828.126-1.17.36a2.33 2.33 0 00-1.676-.712h-.284a2.328 2.328 0 00-2.327 2.325v5.207c-.964-.104-1.446.12-1.446.674 0 .553.341.802 1.024.746v3.704a3.742 3.742 0 002.984 3.658l-.532.532a.62.62 0 10.877.876l1.334-1.331h8.126l1.334 1.331a.618.618 0 00.877 0 .62.62 0 000-.876l-.532-.532a3.742 3.742 0 002.984-3.658v-3.704c.683 0 1.024-.249 1.024-.746zM9.27 4.476c.17 0 .335.043.48.123L7.623 6.714a.986.986 0 01.168-1.177l.775-.772a.99.99 0 01.703-.29zM19.5 15.37c0 1.397-1.123 2.533-2.502 2.533H7.002c-1.38 0-2.502-1.136-2.502-2.533v-3.435h15v3.435z"
+                        stroke="#222" stroke-width=".2" fill="#222"></path>
+                      <path
+                        d="M9.677 7.782l-.251-.25a.25.25 0 00-.353 0 .247.247 0 000 .351l.251.25a.25.25 0 00.353-.35zm1.249-.249a.25.25 0 00-.353 0 .247.247 0 000 .35l.251.25a.25.25 0 00.353-.35l-.251-.25zm-.353-1.493a.247.247 0 000 .351l.251.25a.25.25 0 00.353-.35l-.251-.25a.25.25 0 00-.353 0z"
+                        fill="#53627C"></path>
+                    </g>
+                  </svg>
+                  {{selectedProperty.bath}}
+                </span>
+                <span *ngIf="selectedProperty.sqm">
+                  <svg id="icon-area" viewBox="0 0 24 24">
+                    <g transform="translate(4 4)" fill="none" fill-rule="evenodd">
+                      <path
+                        d="M8.205 8.327a.633.633 0 01.894 0l2.945 2.945-.003-1.605a.633.633 0 111.266.002v3.128a.633.633 0 01-.632.632H9.547a.633.633 0 11-.003-1.267l1.606.004-2.945-2.945a.633.633 0 010-.894zm-.457-.457a.633.633 0 01-.894 0L3.909 4.925l.003 1.606a.633.633 0 11-1.266-.003V3.4c0-.348.283-.632.632-.632h3.128a.633.633 0 11.003 1.267L4.803 4.03l2.945 2.945a.633.633 0 010 .894z"
+                        fill="#53627C"></path>
+                      <rect stroke="#222" stroke-width="1.5" width="16" height="16" rx="3.2"></rect>
+                    </g>
+                  </svg>
+                  {{selectedProperty.sqm}} m<sup>2</sup>
+                </span>
+              </div>
+
+              <div class="qrcode" *ngIf="isToggleQrcode">
+                <br />
+                <div class="code">
+                  <img [src]="qrcodeimage" alt="" />
+                </div>
+                <div class="text">
+                  <img src="/assets/forward-icon.png" alt="" style="height: 20px;" />
+                  <span>View Online</span>
+                </div>
+                <div class="clear"></div>
+              </div>
+
+            </div>
+            <div class="rightbox w-65">
+              <div [innerHTML]="formatted_desc"></div>
+            </div>
+            <div class="clear"></div>
+          </div>
+
+          <br />
+          <div class="bottom-info" *ngIf="selectedStaff && selectedStaff.profile_image">
+            <div class="leftbox w-35">
+              <div class="userinfo">
+                <img [src]="selectedStaff.profile_image" alt="" />
+                <h5>{{selectedStaff.name}}</h5>
+                <span style="display: block">{{selectedStaff.email}}</span>
+                <span style="display: block">{{selectedStaff.phonenumber}}</span>
+                <div class="clear"></div>
+              </div>
+            </div>
+            <div class="rightbox w-65">
+              <div class="org-info" style="text-align: right;line-height: 50px;">
+                <img [src]="selectedStaff.org_logo" [alt]="selectedStaff.org_name" />
+              </div>
+            </div>
+            <div class="clear"></div>
+
+
+            <p *ngIf="selectedStaff.org_website">See the price and more photos<a [href]="selectedStaff.org_website">{{selectedStaff.org_website}}</a></p>
+
+          </div>
+
+          
+        </div>
+        
+      </div>
+
+    </div>
+  </div>
+
+
+</ion-content>

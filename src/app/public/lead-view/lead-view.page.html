@@ -1,0 +1,817 @@
+<ion-content scrollEvents="true">
+
+  <div class="ion-flex dashboard-design">
+
+    <div class="flex-right dashboard-left">
+
+      <ng-container *ngIf="!isLoading; else rightBlock">
+        <div class="dashboard-right-inner" *ngIf="viewModal && viewModal.id">
+          <div class="lead-contact-info">
+
+            <div class="user-avatar text-center">
+              <div class="character-avatar">
+                {{getFirstLetters(viewModal.name)}}
+              </div>
+              <h4 style="margin: 5px 0 0 0;">{{viewModal.name}} </h4>
+              <h6 style="margin: 5px 0 0 0;"><span class="ion-text-uppercase" style="font-size: 12px;">Source: </span> <span style="color: #aaa;font-size: 12px;">{{viewModal.source_name}}</span></h6>
+              <div style="font-size: 12px; color: #aaa;">Registered {{viewModal.dateadded | date:'longDate' }}</div>
+            </div>
+            <!-- March 24, 2019 -->
+            <br />
+            <div class="title-section ion-margin-top ion-margin-bottom">
+              <h6 class="ion-no-margin">Your Contact Details</h6>
+            </div>
+
+            <div class="ion-flex" *ngIf="viewModal.phonenumber">
+              <div class="ion-icon" style="margin-right: 20px">
+                <ion-icon name="call-outline"></ion-icon>
+              </div>
+              <div class="noti-info">
+                {{viewModal.phonenumber}}
+              </div>
+            </div>
+            <div class="ion-flex" *ngIf="viewModal.email">
+              <div class="ion-icon" style="margin-right: 20px">
+                <ion-icon name="mail-outline"></ion-icon>
+              </div>
+              <div class="noti-info">
+                {{viewModal.email}}
+              </div>
+            </div>
+            <div class="ion-flex" *ngIf="viewModal.lineid">
+              <div class="ion-icon" style="margin-right: 20px">
+                <ion-icon name="notifications-outline"></ion-icon>
+              </div>
+              <div class="noti-info">
+                {{viewModal.lineid}}
+              </div>
+            </div>
+          </div>
+
+          <br />
+          <br />
+
+          <div class="ion-flex ion-align-items-start ion-justify-content-between title-section">
+            <h6 class="ion-no-margin">Your Requirements</h6>
+            <!-- <div class="top-verital-line ion-text-right ion-position-relative">
+              <ion-icon name="ellipsis-horizontal-outline" (click)="openProfileMenu()" color="dark"
+                appRemoveIconTitle></ion-icon>
+
+              <ion-menu-toggle class="custom-small-menu" auto-hide="false" *ngIf="isProfileMenu">
+                <ion-list lines="none" class="ion-no-padding">
+                  <ion-item (click)="editLeadProfile(viewModal.id)" class="ion-no-padding"
+                    *ngIf="leadProfileRes != null">
+                    Edit
+                  </ion-item>
+                  <ion-item (click)="editLeadProfile(viewModal.id)" class="ion-no-padding"
+                    *ngIf="leadProfileRes == null">
+                    Add
+                  </ion-item>
+                  <ion-item (click)="deleteLead(viewModal.id)" class="ion-no-padding" *ngIf="leadProfileRes != null">
+                    Delete
+                  </ion-item>
+                </ion-list>
+              </ion-menu-toggle>
+
+            </div> -->
+          </div>
+
+          <br />
+          <ion-grid class="ion-no-padding lead-profile" *ngIf="leadProfileRes; else noleadProfile">
+            <ion-row>
+              <ion-col size="12" *ngIf="leadProfileRes.rent_or_buy">
+                <label>Buy/Rent</label>
+                <p>{{leadProfileRes.rent_or_buy}}</p>
+              </ion-col>
+              <ion-col size="12" *ngIf="leadProfileRes.property_type">
+                <label>Property Type</label>
+                <p>{{leadProfileRes.property_type}}</p>
+              </ion-col>
+              <ion-col size="12" *ngIf="leadProfileRes.no_of_bed">
+                <label>No of Bed</label>
+                <p>{{leadProfileRes.no_of_bed.replace(',', ' or ')}}</p>
+              </ion-col>
+              <ion-col size="12" *ngIf="leadProfileRes.price_from || leadProfileRes.price_to">
+                <label>Budget Range</label>
+                <p>
+                  {{numberWithCommas(leadProfileRes.price_from)}} - {{numberWithCommas(leadProfileRes.price_to)}}
+                </p>
+              </ion-col>
+              <ion-col size="12" *ngIf="leadProfileRes.sqm_range || leadProfileRes.sqm_range">
+                <label>Size(sqm)</label>
+                <p *ngIf="leadProfileRes.property_type === 'Commercial'">
+                  N/A
+                </p>
+                <p *ngIf="leadProfileRes.property_type !== 'Commercial'">
+                  {{leadProfileRes.sqm_range}}
+                </p>
+              </ion-col>
+              <ion-col size="12" *ngIf="leadProfileRes.purpose">
+                <label>Purpose</label>
+                <p *ngIf="leadProfileRes.property_type === 'Commercial'">Invest / Business</p>
+                <p *ngIf="leadProfileRes.property_type !== 'Commercial'">{{leadProfileRes.purpose}}</p>
+              </ion-col>
+              <ion-col size="12" *ngIf="leadProfileRes.features">
+                <label>Features</label>
+                <div [innerHTML]="renderFeatures(leadProfileRes.features)"></div>
+              </ion-col>
+              <ion-col size="12" *ngIf="leadProfileRes.feature_text">
+                <label>Other Features</label>
+                <p>{{leadProfileRes.feature_text}}</p>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+
+          <ng-template #noleadProfile>
+            <ion-grid class="ion-no-padding">
+              <ion-row>
+                <ion-col>
+                  <p class="ion-no-margin">No lead profile assigned</p>
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+
+          </ng-template>
+          
+
+        </div>
+      </ng-container>
+
+
+
+      <ng-template #rightBlock>
+        <ion-list lines="none">
+          <ion-list-header>
+            <ion-skeleton-text [animated]="true" style="width: 80px"></ion-skeleton-text>
+          </ion-list-header>
+          <ion-item>
+            <ion-thumbnail slot="start">
+              <ion-skeleton-text [animated]="true"></ion-skeleton-text>
+            </ion-thumbnail>
+            <ion-label>
+              <h3>
+                <ion-skeleton-text [animated]="true" style="width: 80%;"></ion-skeleton-text>
+              </h3>
+              <p>
+                <ion-skeleton-text [animated]="true" style="width: 60%;"></ion-skeleton-text>
+              </p>
+              <p>
+                <ion-skeleton-text [animated]="true" style="width: 30%;"></ion-skeleton-text>
+              </p>
+            </ion-label>
+          </ion-item>
+        </ion-list>
+        <br />
+        <ion-list lines="none">
+          <ion-list-header>
+            <ion-skeleton-text [animated]="true" style="width: 80px"></ion-skeleton-text>
+          </ion-list-header>
+          <ion-item>
+            <ion-thumbnail slot="start">
+              <ion-skeleton-text [animated]="true"></ion-skeleton-text>
+            </ion-thumbnail>
+            <ion-label>
+              <h3>
+                <ion-skeleton-text [animated]="true" style="width: 80%;"></ion-skeleton-text>
+              </h3>
+              <p>
+                <ion-skeleton-text [animated]="true" style="width: 60%;"></ion-skeleton-text>
+              </p>
+              <p>
+                <ion-skeleton-text [animated]="true" style="width: 30%;"></ion-skeleton-text>
+              </p>
+            </ion-label>
+          </ion-item>
+        </ion-list>
+
+      </ng-template>
+
+
+    </div>
+    <div class="flex-left dashboard-center">
+
+      <ng-container *ngIf="!isLoading; else leftBlock">
+        <div class="dashboard-left-inner" *ngIf="viewModal && viewModal.id">
+          <div class="ion-flex ion-align-items-start ion-justify-content-between title-section">
+            <h4 class="ion-no-margin">Hi {{viewModal.name}}</h4>
+            
+            <!-- <div class="top-verital-line ion-text-right ion-position-relative">
+              <ion-icon name="ellipsis-horizontal-outline" (click)="openLeadMenu()" color="dark"
+                appRemoveIconTitle></ion-icon>
+
+              <ion-menu-toggle class="custom-small-menu" auto-hide="false" *ngIf="isLeadMenu">
+                <ion-list lines="none" class="ion-no-padding">
+                  <ion-item routerLink="/app/leads/edit/{{viewModal.id}}" routerDirection="root" class="ion-no-padding">
+                    Edit
+                  </ion-item>
+
+                  <ion-item (click)="createNote(viewModal.id)" class="ion-no-padding">
+                    Create Note
+                  </ion-item>
+
+                  <ion-item (click)="assignProperty()" class="ion-no-padding">
+                    Assign Property
+                  </ion-item>
+
+                  <ion-item (click)="markAsLost(viewModal.id)" class="ion-no-padding">
+                    Mark As Lost
+                  </ion-item>
+
+
+                  <ion-item class="ion-no-padding" (click)="deleteLead(viewModal.id)">
+                    Delete
+                  </ion-item>
+                </ion-list>
+              </ion-menu-toggle>
+
+            </div> -->
+          </div>
+          <p>Feel free to email me below or update any of your info or requirements you think i should know</p>
+          <br />
+
+
+
+          <div class="custom-tabs">
+            <ul>
+              <!-- <li [ngClass]="{'active':active_tab === 1}" (click)="selectActiveTab(1)">Notes/Requests</li> -->
+              <li [ngClass]="{'active':active_tab === 2}" (click)="selectActiveTab(2)">Send email to agent</li>
+              <!-- <li [ngClass]="{'active':active_tab === 3}" (click)="selectActiveTab(3)" *ngIf="auth.getUser()">File</li> -->
+            </ul>
+            <div class="tab-content">
+              <div class="tab" [ngClass]="{'show':active_tab === 1}">
+                <form [formGroup]="form" (ngSubmit)="submitForm()" novalidate>
+                  <ion-textarea formControlName="description" rows="5" class="input" placeholder="type and requests or notes to this agent here..."></ion-textarea>
+                  <br />
+                  <div class="ion-text-end">
+                    <ion-button type="submit" color="primary" shape="round" size="small" [disabled]="isSubmitted">Save</ion-button>
+                  </div>
+                  
+                </form>
+              </div>
+              <div class="tab" [ngClass]="{'show':active_tab === 2}">
+                <form [formGroup]="emailForm" (ngSubmit)="submitEmailForm()" novalidate>
+                  <ion-textarea formControlName="description" rows="5" class="input" placeholder="type here..."></ion-textarea>
+                  <br />
+                  <div class="ion-text-end">
+                    <ion-button type="submit" color="primary" shape="round" size="small" [disabled]="isSubmitted">Save</ion-button>
+                  </div>
+                  
+                </form>
+              </div>
+              <div class="tab" [ngClass]="{'show':active_tab === 3}">
+                <h6 class="ion-no-margin ion-margin-bottom">Upload Files</h6>
+                <div id="files-grid" class="files-grid" >
+
+                  
+                  <div class="file-box" *ngFor="let file of files; let i = index">
+                    <div class="remove-img" (click)="removeEditFile(file.id, file.rel_id)">
+                      <ion-icon name="close-outline"></ion-icon>
+                    </div>
+                    
+                    <img [src]="file['image']" alt="" />
+                  </div>
+    
+                  <div class="add-new-file" (click)="mediaFile.click()">
+                    <input type="file" accept="image/*" id="mediaFile" #mediaFile multiple
+                      (change)="onSelectFile(mediaFile.files)" style="display: none;">
+                    <ion-icon name="images-outline"></ion-icon>
+                  </div>
+    
+                </div>
+              </div>
+            </div>
+          </div>
+          <br />
+
+          <div class="logs-wrap" *ngIf="viewModal.activity_log && viewModal.activity_log.length > 0">
+            <div class="log-loop" *ngFor="let activity of viewModal.activity_log">
+
+              <div *ngIf="activity.logs && activity.logs.length > 0">
+
+                <div *ngFor="let log of activity.logs">
+                  <div *ngIf="log.lead_type == 'not_lead_activity_created' && log.res">
+
+                    <div style="margin-bottom: 5px;"><small>{{log.date | date:'short' }}</small></div>
+                    <h6>Inquiry Received</h6>
+                    <div class="listing-box">
+                      <div class="ion-flex">
+                        <div class="thumbnail">
+                          <img [src]="log.res.featured" [alt]="log.res.name" />
+                        </div>
+                        <div class="same-lead" *ngIf="activity.same_lead">
+                          +{{activity.same_lead}}
+                        </div>
+                        <div class="info">
+                          <h4 class="ellipse">{{log.res.name}}</h4>
+                          <p style="margin-top: 10px;">
+                            <span>MSP - {{log.res.id}}</span>
+                            <span *ngIf="log.res.prop_type == 'buy'">
+                              - {{log.res.sale_price | currency:'฿': 'symbol' : '1.0-0'}}
+                            </span>
+                            <span *ngIf="log.res.prop_type == 'Rent'">
+                              - {{log.res.rent_price | currency:'฿': 'symbol' : '1.0-0'}}/m
+                            </span>
+                            <span *ngIf="log.res.prop_type == 'Rent, Buy'">
+                              <span *ngIf="log.res.sale_price_org">
+                                {{log.res.sale_price | currency:'฿': 'symbol' : '1.0-0'}}
+                              </span>
+                              <span *ngIf="log.res.rent_price_org">
+                                - {{log.res.rent_price | currency:'฿': 'symbol' : '1.0-0'}}/m
+                              </span>
+                            </span>
+                          </p>
+      
+                          <div class="ion-flex features">
+      
+                            <div class="item-box" *ngIf="log.res.bed">
+                              <div class="num">{{log.res.bed}} Beds</div>
+      
+                            </div>
+      
+                            <div class="item-box" *ngIf="log.res.bed">
+                              <div class="num"><span class="dot"></span>{{log.res.bath}} Baths</div>
+                            </div>
+      
+                            <div class="item-box" *ngIf="log.res.sqm">
+                              <div class="num"><span class="dot"></span>{{log.res.sqm}}/Sqm</div>
+                            </div>
+      
+                          </div>
+      
+      
+      
+                        </div>
+      
+      
+      
+                      </div>
+                      <div class="desc ion-margin-top">
+                        <p>{{activity.lead.description}}</p>
+                      </div>
+                    </div>
+
+                  </div>
+
+                  <div class="log-list-wrap" *ngIf="log.lead_type == 'not_lead_activity_added_note' && log.res">
+
+                    <div class="log-list-inner" >
+                      <div><small>{{log.date | date:'short' }}</small></div>
+                      <h5>New Note</h5>
+                      <div class="log-message-wrap">
+                        <!-- <div class="top-verital-line ion-text-right">
+                          <ion-icon name="ellipsis-vertical-outline" (click)="openNoteMenu()" color="dark"></ion-icon>
+    
+                          <ion-menu-toggle class="custom-small-menu" auto-hide="false" *ngIf="isNoteMenu">
+                            <ion-list lines="none" class="ion-no-padding">
+                              <ion-item (click)="editNote(lg.id)" class="ion-no-padding">
+                                Edit
+                              </ion-item>
+                              <ion-item class="ion-no-padding" (click)="deleteNote(lg.id)">
+                                Delete
+                              </ion-item>
+                            </ion-list>
+                          </ion-menu-toggle>
+    
+                        </div> -->
+    
+                        <div class="log-message" [innerHTML]="log.res.description"></div>
+    
+                      </div>
+    
+                    </div>
+
+                  </div>
+
+                  <div class="log-list-wrap" *ngIf="log.lead_type == 'lead_listing_sent' && log.res">
+                    <div class="log-list-inner">
+                      <div><small>{{log.date | date:'short' }}</small></div>
+                      <h5>Listing Sent</h5>
+                      <div class="ion-flex ion-align-items-center card">
+                        <a class="avatar" [routerLink]="['/app/listings/view/'+log.res.id]">
+                          <img [src]="log.res.img_url" alt="" />
+                        </a>
+                        <div class="info ion-flex">
+                          <div class="name ellipse">
+                            <a [routerLink]="['/app/listings/view/'+log.res.id]">
+                              {{log.res.name}}
+                            </a>
+                          </div>
+                          <div class="action" *ngIf="log.res.listing_sent === null">
+                            <ion-icon name="checkmark-outline" color="success" class="ion-margin-start" (click)="update_listing_sent_status('Interested', log.res.id)" tooltip="Show interest in this listing" placement="top" appTooltip appRemoveIconTitle></ion-icon>
+                            <ion-icon name="close-outline" color="danger" (click)="update_listing_sent_status('Not Interested', log.res.id)" tooltip="Not interested" placement="top" appTooltip appRemoveIconTitle></ion-icon>
+                          </div>
+                        </div>
+                      </div>
+    
+                    </div>
+                  </div>
+
+                  <div class="log-list-wrap" *ngIf="log.lead_type == 'lead_email_sent' && log.res">
+                    <div class="log-list-inner">
+                      <div><small>{{log.date | date:'short' }}</small></div>
+                      <h5>{{log.res.lead_name}} sent an email</h5>
+                      <div class="log-message-wrap">
+                        <div class="log-message" [innerHTML]="log.res.description"></div>
+                      </div>
+    
+                    </div>
+                  </div>
+
+                  <div class="log-list-wrap" *ngIf="log.lead_type == 'not_activity_new_reminder_created' && log.res">
+                    <div class="log-list-inner" *ngIf="log.res.event">
+                      <div><small>{{log.date | date:'short' }}</small></div>
+                      <h5>Showing Requested</h5>
+                      <div class="log-message-wrap">
+                        <div class="showing-inner">
+                          <div class="showing-date-box">
+                            <div class="day">{{log.res.event.start | date: 'EEEE'}}</div>
+                            <div class="month-name">{{log.res.event.start | date: 'dd'}}</div>
+                            <div class="year">{{log.res.event.start | date: 'MMM'}}</div>
+                          </div>
+                          <div class="showing-info-box">
+                            <div class="name">{{log.res.name}}</div>
+                            
+                          </div>
+                        </div>
+                      </div>
+    
+                    </div>
+                  </div>
+
+
+                </div>
+
+              </div>
+
+
+
+
+
+            </div>
+          </div>
+
+
+        </div>
+      </ng-container>
+
+
+
+      <ng-template #leftBlock>
+        <ion-list lines="none">
+          <ion-list-header>
+            <ion-skeleton-text [animated]="true" style="width: 80px"></ion-skeleton-text>
+          </ion-list-header>
+          <ion-item>
+            <ion-thumbnail slot="start">
+              <ion-skeleton-text [animated]="true"></ion-skeleton-text>
+            </ion-thumbnail>
+            <ion-label>
+              <h3>
+                <ion-skeleton-text [animated]="true" style="width: 80%;"></ion-skeleton-text>
+              </h3>
+              <p>
+                <ion-skeleton-text [animated]="true" style="width: 60%;"></ion-skeleton-text>
+              </p>
+              <p>
+                <ion-skeleton-text [animated]="true" style="width: 30%;"></ion-skeleton-text>
+              </p>
+            </ion-label>
+          </ion-item>
+        </ion-list>
+        <br />
+        <ion-list lines="none">
+          <ion-list-header>
+            <ion-skeleton-text [animated]="true" style="width: 80px"></ion-skeleton-text>
+          </ion-list-header>
+          <ion-item>
+            <ion-thumbnail slot="start">
+              <ion-skeleton-text [animated]="true"></ion-skeleton-text>
+            </ion-thumbnail>
+            <ion-label>
+              <h3>
+                <ion-skeleton-text [animated]="true" style="width: 80%;"></ion-skeleton-text>
+              </h3>
+              <p>
+                <ion-skeleton-text [animated]="true" style="width: 60%;"></ion-skeleton-text>
+              </p>
+              <p>
+                <ion-skeleton-text [animated]="true" style="width: 30%;"></ion-skeleton-text>
+              </p>
+            </ion-label>
+          </ion-item>
+        </ion-list>
+        <br />
+        <ion-list lines="none">
+          <ion-list-header>
+            <ion-skeleton-text [animated]="true" style="width: 80px"></ion-skeleton-text>
+          </ion-list-header>
+          <ion-item>
+            <ion-thumbnail slot="start">
+              <ion-skeleton-text [animated]="true"></ion-skeleton-text>
+            </ion-thumbnail>
+            <ion-label>
+              <h3>
+                <ion-skeleton-text [animated]="true" style="width: 80%;"></ion-skeleton-text>
+              </h3>
+              <p>
+                <ion-skeleton-text [animated]="true" style="width: 60%;"></ion-skeleton-text>
+              </p>
+              <p>
+                <ion-skeleton-text [animated]="true" style="width: 30%;"></ion-skeleton-text>
+              </p>
+            </ion-label>
+          </ion-item>
+        </ion-list>
+      </ng-template>
+
+
+    </div>
+    <div class="flex-right dashboard-right">
+
+      <ng-container *ngIf="!isLoading; else rightBlock">
+        <div class="dashboard-right-inner" *ngIf="viewModal && viewModal.assignee">
+
+          <h6 class="ion-no-margin ion-margin-bottom">Brokerage Details</h6>
+
+          <div class="org-logo" *ngIf="viewModal.assignee.org_image">
+            <img [src]="viewModal.assignee.org_image" [alt]="viewModal.assignee.org_name" />
+          </div>
+
+          <div class="lead-contact-info">
+            <div class="ion-flex ion-margin-bottom">
+              <ion-avatar style="width: 25px; height: 25px; margin-right: 20px;">
+                <img [src]="viewModal.assignee.image" alt="" />
+              </ion-avatar>
+              <div class="agent-name-org">
+                <h5 class="ion-no-margin">{{viewModal.assignee.name}}</h5>
+                <div>{{viewModal.assignee.org_name}}</div>
+              </div>
+              
+            </div>
+            <div class="ion-flex" *ngIf="viewModal.phonenumber">
+              <div class="ion-icon" style="margin-right: 20px">
+                <ion-icon name="call-outline"></ion-icon>
+              </div>
+              <div class="noti-info">
+                {{viewModal.phonenumber}}
+              </div>
+            </div>
+            <!-- <div class="ion-flex" *ngIf="viewModal.email">
+              <div class="ion-icon" style="margin-right: 20px">
+                <ion-icon name="mail-outline"></ion-icon>
+              </div>
+              <div class="noti-info">
+                {{viewModal.email}}
+              </div>
+            </div> -->
+            <!-- <div class="ion-flex" *ngIf="viewModal.lineid">
+              <div class="ion-icon" style="margin-right: 20px">
+                <ion-icon name="notifications-outline"></ion-icon>
+              </div>
+              <div class="noti-info">
+                {{viewModal.lineid}}
+              </div>
+            </div> -->
+          </div>
+
+          <br />
+ 
+          <h6 class="ion-no-margin">Your Listings of interest</h6>
+          <br />
+
+          <div class="custom-tabs-sidebar">
+            <ul>
+              <li [ngClass]="{'active':active_sidebar_tab === 2}" (click)="selectActiveSidebarTab(2)">Interest</li>
+              <li [ngClass]="{'active':active_sidebar_tab === 3}" (click)="selectActiveSidebarTab(3)">Not Interest</li>
+              <li [ngClass]="{'active':active_sidebar_tab === 1}" (click)="selectActiveSidebarTab(1)">Sent</li>
+            </ul>
+            <div class="tab-content">
+              <div class="tab" [ngClass]="{'show':active_sidebar_tab === 1}">
+                <div class="similar-listings" *ngIf="viewModal.listing_sents && viewModal.listing_sents.length > 0;else noSimilarListings">
+                  
+                    <div class="similar-listing-box" *ngFor="let listing of viewModal.listing_sents">
+                      <div class="ion-flex" *ngIf="listing.status == 'Sent' ">
+                        <a class="avatar" [routerLink]="['/app/listings/view/'+listing.id]">
+                          <img [src]="listing.img_url" alt="" />
+                        </a>
+                        <div class="info">
+                          <div class="name ellipse">
+                            <a [routerLink]="['/app/listings/view/'+listing.id]">
+                              {{listing.name}}
+                            </a>
+                          </div>
+                          <div class="ion-flex features">
+  
+                            <div class="item-box" *ngIf="listing.bed">
+                              <div class="num">{{listing.bed}} Beds</div>
+  
+                            </div>
+  
+                            <div class="item-box" *ngIf="listing.bed">
+                              <div class="num"><span class="dot"></span>{{listing.bath}} Baths</div>
+                            </div>
+  
+                            <div class="item-box" *ngIf="listing.sqm">
+                              <div class="num"><span class="dot"></span>{{listing.sqm}}/Sqm</div>
+                            </div>
+  
+                          </div>
+                        </div>
+  
+                        <div class="ion-listing-actions">
+                          <div class="ion-flex">
+                            <!-- <div class="ion-left ion-margin-start" *ngIf="auth.getUser()">
+                              <ion-icon name="paper-plane-outline" appRemoveIconTitle
+                                (click)="sentListing(viewModal.id, listing.id)"></ion-icon>
+                            </div> -->
+                            <div class="ion-right ion-margin-start">
+                              <ion-icon name="copy-outline" appCopyTextClipboard [copy]="listing.share"></ion-icon>
+                            </div>
+                          </div>
+                        </div>
+  
+                      </div>
+                    </div>
+                  
+                  
+                
+                </div>
+              </div>
+              <div class="tab" [ngClass]="{'show':active_sidebar_tab === 2}">
+                <div class="similar-listings" *ngIf="viewModal.listing_sents && viewModal.listing_sents.length > 0;else noSimilarListings">
+                  
+                  <div class="similar-listing-box" *ngFor="let listing of viewModal.listing_sents">
+                    <div class="ion-flex" *ngIf="listing.status == 'Interested' ">
+                      <a class="avatar" [routerLink]="['/app/listings/view/'+listing.id]">
+                        <img [src]="listing.img_url" alt="" />
+                      </a>
+                      <div class="info">
+                        <div class="name ellipse">
+                          <a [routerLink]="['/app/listings/view/'+listing.id]">
+                            {{listing.name}}
+                          </a>
+                        </div>
+                        <div class="ion-flex features">
+
+                          <div class="item-box" *ngIf="listing.bed">
+                            <div class="num">{{listing.bed}} Beds</div>
+
+                          </div>
+
+                          <div class="item-box" *ngIf="listing.bed">
+                            <div class="num"><span class="dot"></span>{{listing.bath}} Baths</div>
+                          </div>
+
+                          <div class="item-box" *ngIf="listing.sqm">
+                            <div class="num"><span class="dot"></span>{{listing.sqm}}/Sqm</div>
+                          </div>
+
+                        </div>
+                      </div>
+
+                      <div class="ion-listing-actions">
+                        <div class="ion-flex">
+                          <div class="ion-right ion-margin-start">
+                            <ion-icon name="copy-outline" appCopyTextClipboard [copy]="listing.share"></ion-icon>
+                          </div>
+                        </div>
+                      </div>
+
+                    </div>
+                  </div>
+                
+                
+              
+              </div>
+              </div>
+              <div class="tab" [ngClass]="{'show':active_sidebar_tab === 3}">
+                <div class="similar-listings" *ngIf="viewModal.listing_sents && viewModal.listing_sents.length > 0;else noSimilarListings">
+                  
+                  <div class="similar-listing-box" *ngFor="let listing of viewModal.listing_sents">
+                    <div class="ion-flex" *ngIf="listing.status == 'Not Interested' ">
+                      <a class="avatar" [routerLink]="['/app/listings/view/'+listing.id]">
+                        <img [src]="listing.img_url" alt="" />
+                      </a>
+                      <div class="info">
+                        <div class="name ellipse">
+                          <a [routerLink]="['/app/listings/view/'+listing.id]">
+                            {{listing.name}}
+                          </a>
+                        </div>
+                        <div class="ion-flex features">
+
+                          <div class="item-box" *ngIf="listing.bed">
+                            <div class="num">{{listing.bed}} Beds</div>
+
+                          </div>
+
+                          <div class="item-box" *ngIf="listing.bed">
+                            <div class="num"><span class="dot"></span>{{listing.bath}} Baths</div>
+                          </div>
+
+                          <div class="item-box" *ngIf="listing.sqm">
+                            <div class="num"><span class="dot"></span>{{listing.sqm}}/Sqm</div>
+                          </div>
+
+                        </div>
+                      </div>
+
+                      <div class="ion-listing-actions">
+                        <div class="ion-flex">
+                          <div class="ion-right ion-margin-start">
+                            <ion-icon name="copy-outline" appCopyTextClipboard [copy]="listing.share"></ion-icon>
+                          </div>
+                        </div>
+                      </div>
+
+                    </div>
+                  </div>
+                
+                
+              
+              </div>
+              </div>
+            </div>
+          </div>
+          <br />
+          
+
+          <br />
+          <h6 class="ion-no-margin">Showings</h6>
+          <br />
+          <div class="similar-listings">
+            <div class="empty-listings">No showings scheduled</div>
+          </div>
+
+
+          <ng-template #noSimilarListings>
+            <div class="similar-listings">
+              <div class="empty-listings">No data found</div>
+            </div>
+          </ng-template>
+
+        </div>
+      </ng-container>
+
+
+
+      <ng-template #rightBlock>
+        <ion-list lines="none">
+          <ion-list-header>
+            <ion-skeleton-text [animated]="true" style="width: 80px"></ion-skeleton-text>
+          </ion-list-header>
+          <ion-item>
+            <ion-thumbnail slot="start">
+              <ion-skeleton-text [animated]="true"></ion-skeleton-text>
+            </ion-thumbnail>
+            <ion-label>
+              <h3>
+                <ion-skeleton-text [animated]="true" style="width: 80%;"></ion-skeleton-text>
+              </h3>
+              <p>
+                <ion-skeleton-text [animated]="true" style="width: 60%;"></ion-skeleton-text>
+              </p>
+              <p>
+                <ion-skeleton-text [animated]="true" style="width: 30%;"></ion-skeleton-text>
+              </p>
+            </ion-label>
+          </ion-item>
+        </ion-list>
+        <br />
+        <ion-list lines="none">
+          <ion-list-header>
+            <ion-skeleton-text [animated]="true" style="width: 80px"></ion-skeleton-text>
+          </ion-list-header>
+          <ion-item>
+            <ion-thumbnail slot="start">
+              <ion-skeleton-text [animated]="true"></ion-skeleton-text>
+            </ion-thumbnail>
+            <ion-label>
+              <h3>
+                <ion-skeleton-text [animated]="true" style="width: 80%;"></ion-skeleton-text>
+              </h3>
+              <p>
+                <ion-skeleton-text [animated]="true" style="width: 60%;"></ion-skeleton-text>
+              </p>
+              <p>
+                <ion-skeleton-text [animated]="true" style="width: 30%;"></ion-skeleton-text>
+              </p>
+            </ion-label>
+          </ion-item>
+        </ion-list>
+
+      </ng-template>
+
+
+    </div>
+
+
+
+  </div>
+
+
+
+
+
+
+</ion-content>

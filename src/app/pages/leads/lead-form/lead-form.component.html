@@ -1,0 +1,289 @@
+<ion-popover trigger="date" size="cover">
+  <ng-template>
+    <ion-calendar [(ngModel)]="dateRange" [options]="optionsRange" [type]="type" (change)="onChange($event)"
+      [format]="'YYYY-MM-DD'">
+    </ion-calendar>
+  </ng-template>
+</ion-popover>
+
+
+
+<div class="ion-padding">
+
+  <div class="close-btn-listing ion-text-right" id="closeFormModel" (click)="closeFormModal()">
+    <ion-icon name="close-outline"></ion-icon>
+  </div>
+
+  <h4>Add Lead</h4>
+
+  <form [formGroup]="form" (ngSubmit)="submitForm()">
+
+    <ion-grid>
+
+      <!-- <ion-row>
+          <ion-col>
+            <ion-item fill="outline" color="medium">
+              <ion-label position="floating">Status</ion-label>
+              <ion-select formControlName="status" interface="popover">
+                <ion-select-option [value]="sts.id" *ngFor="let sts of statuses">{{sts.name}}
+                </ion-select-option>
+              </ion-select>
+            </ion-item>
+          </ion-col>
+          <ion-col>
+            <ion-item fill="outline" color="medium">
+              <ion-label position="floating">Source</ion-label>
+              <ion-select formControlName="source" interface="popover">
+                <ion-select-option [value]="sorc.id" *ngFor="let sorc of sources">{{sorc.name}}
+                </ion-select-option>
+              </ion-select>
+            </ion-item>
+          </ion-col>
+          <ion-col>
+            <ion-item fill="outline" color="medium">
+
+              <ion-label position="floating">Assigned</ion-label>
+              <ionic-selectable formControlName="assigned_list" [items]="members" itemValueField="id"
+                itemTextField="firstname" [canSearch]="true" (onChange)="leadAssignedChange($event)"
+                (onSearch)="searchLeadAssigned($event)">
+              </ionic-selectable>
+
+
+            </ion-item>
+          </ion-col>
+          <ion-col>
+            <ion-item fill="outline" color="medium">
+
+              <ion-label position="floating">Projects</ion-label>
+              <ionic-selectable formControlName="project_list" [items]="lead_projects" itemValueField="id"
+                itemTextField="name" [canSearch]="true" (onChange)="leadProjectsChange($event)"
+                (onSearch)="searchLeadProjects($event)">
+              </ionic-selectable>
+
+
+            </ion-item>
+          </ion-col>
+        </ion-row> -->
+
+      <!-- <ion-row>
+          <ion-col>
+            <tag-input formControlName="tags" placeholder="add tag" secondaryPlaceholder="add tag"
+              [allowDupes]="false"></tag-input>
+          </ion-col>
+        </ion-row> -->
+
+      <ion-row>
+        <ion-col>
+          <div class="normal-input ion-flex ion-align-items-center">
+            <div>
+              <span class="float-text" [ngClass]="{'show': form.value.name != ''}">Name</span>
+              <span *ngIf="isSubmitted && errorControl.name.errors?.required">*</span>
+            </div>
+            <ion-input formControlName="name" type="text" placeholder="Name"></ion-input>
+          </div>
+        </ion-col>
+        <ion-col>
+          <div class="normal-input ion-flex ion-align-items-center">
+            <div>
+              <span class="float-text" [ngClass]="{'show': form.value.email != ''}">Email Address</span>
+              <span *ngIf="isSubmitted && errorControl.email.errors?.required">*</span>
+            </div>
+            <ion-input formControlName="email" type="email" placeholder="Email Address"></ion-input>
+          </div>
+        </ion-col>
+      </ion-row>
+
+      <ion-row>
+        <ion-col>
+          <div class="normal-input ion-flex ion-align-items-center">
+            <div>
+              <span class="float-text" [ngClass]="{'show': form.value.phonenumber != ''}">Phone/Whatsapp No.</span>
+              <span *ngIf="isSubmitted && errorControl.phonenumber.errors?.required">*</span>
+            </div>
+            <ion-input formControlName="phonenumber" type="text" placeholder="Phone/Whatsapp No."></ion-input>
+          </div>
+        </ion-col>
+        <ion-col>
+          <div class="normal-input ion-flex ion-align-items-center">
+            <div>
+              <span class="float-text" [ngClass]="{'show': form.value.lineid != ''}">Line ID</span>
+              <span *ngIf="isSubmitted && errorControl.lineid.errors?.required">*</span>
+            </div>
+            <ion-input formControlName="lineid" type="text" placeholder="Line ID"></ion-input>
+          </div>
+        </ion-col>
+      </ion-row>
+
+      <ion-row>
+        <ion-col>
+          <div class="normal-input ion-flex ion-align-items-center">
+            <div>
+              <span class="float-text" [ngClass]="{'show': form.value.preferred_contact != ''}">Preferred Contact
+                Method</span>
+              <span *ngIf="isSubmitted && errorControl.preferred_contact.errors?.required">*</span>
+            </div>
+            <ion-select formControlName="preferred_contact" interface="popover" placeholder="Preferred Contact
+            Method">
+              <ion-select-option [value]="meth" *ngFor="let meth of preferred_contact_methods">{{meth}}
+              </ion-select-option>
+            </ion-select>
+          </div>
+
+        </ion-col>
+        <ion-col>
+          <div class="normal-input ion-flex ion-align-items-center">
+            <div>
+              <span class="float-text" [ngClass]="{'show': form.value.source != ''}">Source</span>
+              <span *ngIf="isSubmitted && errorControl.source.errors?.required">*</span>
+            </div>
+            <ion-select formControlName="source" interface="popover">
+              <ion-select-option [value]="sorc.id" *ngFor="let sorc of sources">{{sorc.name}}
+              </ion-select-option>
+            </ion-select>
+          </div>
+        </ion-col>
+      </ion-row>
+
+
+
+      <h4>Lead Profile</h4>
+
+      <div formGroupName="lead_profile">
+        <ion-row>
+          <ion-col>
+            <div class="normal-input ion-flex ion-align-items-center">
+              <div>
+                <span class="float-text"
+                  [ngClass]="{'show': form.get('lead_profile').value.property_type != ''}">Property Type</span>
+                <span *ngIf="isSubmitted && form.get('lead_profile.property_type').errors?.required">*</span>
+              </div>
+              <ion-select formControlName="property_type" interface="popover" placeholder="Property Type">
+                <ion-select-option [value]="opt" *ngFor="let opt of property_types">{{opt}}</ion-select-option>
+              </ion-select>
+            </div>
+          </ion-col>
+          <ion-col>
+            <div class="normal-input ion-flex ion-align-items-center">
+              <div>
+                <span class="float-text"
+                  [ngClass]="{'show': form.get('lead_profile').value.rent_or_buy != ''}">Rent/Sale</span>
+                <span *ngIf="isSubmitted && form.get('lead_profile.rent_or_buy').errors?.required">*</span>
+              </div>
+              <ion-select formControlName="rent_or_buy" interface="popover" placeholder="Rent/Sale">
+                <ion-select-option value="Rent">Rent</ion-select-option>
+                <ion-select-option value="Buy">Sale</ion-select-option>
+                <ion-select-option value="Rent, Buy">Rent, Sale</ion-select-option>
+              </ion-select>
+            </div>
+          </ion-col>
+        </ion-row>
+
+        <ion-row>
+          <ion-col>
+            <div class="normal-input ion-flex ion-align-items-center">
+              <div>
+                <span class="float-text" [ngClass]="{'show': form.get('lead_profile').value.price_from != ''}">Range
+                  From</span>
+                <span *ngIf="isSubmitted && form.get('lead_profile.price_from').errors?.required">*</span>
+              </div>
+              <ion-input type="number" formControlName="price_from" placeholder="Range From"></ion-input>
+            </div>
+          </ion-col>
+          <ion-col>
+            <div class="normal-input ion-flex ion-align-items-center">
+              <div>
+                <span class="float-text" [ngClass]="{'show': form.get('lead_profile').value.price_to != ''}">Range
+                  To</span>
+                <span *ngIf="isSubmitted && form.get('lead_profile.price_to').errors?.required">*</span>
+              </div>
+              <ion-input type="number" formControlName="price_to" placeholder="Range To"></ion-input>
+            </div>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col>
+            <div class="normal-input ion-flex ion-align-items-center">
+              <div>
+                <span class="float-text" [ngClass]="{'show': form.get('lead_profile').value.no_of_bed != ''}">No of
+                  bed</span>
+                <span *ngIf="isSubmitted && form.get('lead_profile.no_of_bed').errors?.required">*</span>
+              </div>
+              <ion-select formControlName="no_of_bed" interface="popover" placeholder="No of bed" [multiple]="true">
+                <ion-select-option [value]="opt" *ngFor="let opt of beds">{{opt}}</ion-select-option>
+              </ion-select>
+            </div>
+          </ion-col>
+          <ion-col>
+            <div class="normal-input ion-flex ion-align-items-center">
+              <div>
+                <span class="float-text" [ngClass]="{'show': form.get('lead_profile').value.sqm_range != ''}">Size
+                  (sqm)</span>
+                <span *ngIf="isSubmitted && form.get('lead_profile.sqm_range').errors?.required">*</span>
+              </div>
+              <ion-select formControlName="sqm_range" interface="popover" placeholder="Size (sqm)">
+                <ion-select-option [value]="opt" *ngFor="let opt of sqm_list">{{opt}}</ion-select-option>
+              </ion-select>
+            </div>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col>
+            <div class="normal-input ion-flex ion-align-items-center">
+              <div>
+                <span class="float-text"
+                  [ngClass]="{'show': form.get('lead_profile').value.purpose != ''}">Purpose</span>
+                <span *ngIf="isSubmitted && form.get('lead_profile.purpose').errors?.required">*</span>
+              </div>
+              <ion-select formControlName="purpose" interface="popover" placeholder="Purpose">
+                <ion-select-option [value]="opt" *ngFor="let opt of purposes">{{opt}}</ion-select-option>
+              </ion-select>
+            </div>
+          </ion-col>
+          <ion-col>
+            <div class="normal-input ion-flex ion-align-items-center">
+              <div>
+                <span class="float-text"
+                  [ngClass]="{'show': form.get('lead_profile').value.features != ''}">Features</span>
+                <span *ngIf="isSubmitted && form.get('lead_profile.features').errors?.required">*</span>
+              </div>
+              <ion-select formControlName="features" interface="popover" (onChange)="leadFeaturesChange($event)"
+                [multiple]="true" placeholder="Features">
+                <ion-select-option [value]="fet.name" *ngFor="let fet of features_list">{{fet.name}}</ion-select-option>
+              </ion-select>
+            </div>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col>
+            <div class="normal-input ion-flex ion-align-items-center"
+              [ngClass]="{'textarea-bg': form.get('lead_profile').value.feature_text != ''}">
+              <div>
+                <span class="float-text" [ngClass]="{'show': form.get('lead_profile').value.feature_text != ''}">Other
+                  Description</span>
+                <span *ngIf="isSubmitted && form.get('lead_profile.feature_text').errors?.required">*</span>
+              </div>
+              <ion-textarea formControlName="feature_text" placeholder="Other Description..." [autoGrow]="true"
+                [rows]="2"></ion-textarea>
+            </div>
+          </ion-col>
+          <ion-col></ion-col>
+        </ion-row>
+      </div>
+
+
+
+
+
+    </ion-grid>
+
+    <br />
+    <br />
+    <div class="text-center">
+      <ion-button shape="round" type="submit" class="login-btn">Submit</ion-button>
+    </div>
+
+
+
+  </form>
+
+</div>

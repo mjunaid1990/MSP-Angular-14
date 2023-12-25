@@ -1,0 +1,328 @@
+<app-header ></app-header>
+<ion-content>
+  <div class="main-content">
+
+    <div class="leads-dashbord">
+      <ion-grid class="filter-grid">
+        <ion-row class="ion-flex ion-align-items-center">
+          <ion-col size="2">
+            <ion-text class="h2 ion-text-uppercase">Users</ion-text>
+          </ion-col>
+
+          <ion-col size="8" class="ion-flex ion-align-items-center">
+
+
+
+          </ion-col>
+
+
+          <ion-col size="2" class="ion-text-right">
+            <ion-button (click)="addUser()" shape="round" color="success" class="ion-text-capitalize">
+              <ion-icon name="add-outline"></ion-icon>
+              Add User
+            </ion-button>
+          </ion-col>
+
+        </ion-row>
+      </ion-grid>
+
+
+
+      <br />
+
+      <ion-grid>
+        <ion-row>
+          <ion-col size="8"></ion-col>
+          <ion-col size="4">
+
+            <ion-item fill="outline" color="medium">
+              <ion-input placeholder="Search..." (ionInput)="searchUser($event)"></ion-input>
+              <ion-icon name="search-outline" slot="end" color="success"></ion-icon>
+            </ion-item>
+
+
+          </ion-col>
+
+        </ion-row>
+      </ion-grid>
+      <br />
+
+      <table class="table custom-table">
+        <thead>
+          <tr>
+            <th>Property</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Phone</th>
+            <th>Line ID</th>
+            <th>Organization</th>
+            <th>Role</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody *ngIf="lists && lists.length > 0">
+          <tr *ngFor="let item of lists| paginate: { itemsPerPage: 10, currentPage: p, totalItems: total }">
+            <td>
+              <ion-avatar>
+                <img style="width: 30px;height: 30px;" alt="" [src]="item.profile_image" />
+              </ion-avatar>
+
+            </td>
+            <td class="name-col">
+              <ion-text>{{item.full_name}}</ion-text>
+              <div class="actions">
+                <div class="edit" title="Edit" (click)="editRow(item.staffid)">
+                  <ion-icon name="create-outline" color="primary" slot="icon-only" [iconTitle]="'Edit'"
+                    appRemoveIconTitle></ion-icon>
+                </div>
+                <div class="del" title="Delete" (click)="deleteRow(item.staffid)">
+                  <ion-icon name="trash-outline" color="danger" slot="icon-only" [iconTitle]="'Delete'"
+                    appRemoveIconTitle></ion-icon>
+                </div>
+              </div>
+            </td>
+            <td>
+              <ion-text>{{item.email}}</ion-text>
+            </td>
+            <td>
+              <ion-text>{{item.phonenumber}}</ion-text>
+            </td>
+            <td>{{item.line_id}}</td>
+            <td>
+              <ion-text *ngIf="item.org">{{item.org}}</ion-text>
+            </td>
+            <td>
+              <ion-text *ngIf="item.role">{{item.role}}</ion-text>
+            </td>
+            <td>
+              <span *ngIf="item.active == 1">
+                <ion-chip color="success">Active</ion-chip>
+              </span>
+              <span *ngIf="item.active == 0">
+                <ion-chip color="medium">InActive</ion-chip>
+              </span>
+            </td>
+          </tr>
+
+          
+
+        </tbody>
+        <tbody *ngIf="lists && lists.length == 0">
+          <tr>
+            <td colspan="8">No records found</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <ion-grid>
+        <ion-row class="ion-align-items-center ion-justify-content-between">
+          <ion-col>
+            <div *ngIf="lists && lists.length > 0">
+              Showing of {{p * limit - 9}} to {{p * limit}} of {{total}}
+
+            </div>
+          </ion-col>
+          <ion-col class="ion-flex ion-justify-content-end">
+            <pagination-controls previousLabel="Prev" nextLabel="Next" (pageChange)="pageChangeEvent($event)" *ngIf="lists && lists.length > 1">
+            </pagination-controls>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+
+
+
+
+      <br />
+      <br />
+
+    </div>
+
+
+
+
+
+  </div>
+
+
+
+
+</ion-content>
+
+
+<!-- add/edit modal -->
+
+<ion-modal class="user-form-modal height-0" [isOpen]="isModalOpen" (willDismiss)="onWillDismiss($event)">
+
+  <ng-template class="ion-padding">
+
+    <div class="close-btn-listing ion-text-right" id="closeFormModel" (click)="closeModel()">
+      <ion-icon name="close-outline"></ion-icon>
+    </div>
+
+    <ion-text class="title">Add User</ion-text>
+
+    <form [formGroup]="UserForm" (ngSubmit)="submitForm()">
+
+      <ion-grid>
+
+        <ion-row class="ion-margin-bottom">
+          <ion-col>
+            <ion-input type="file" formControlName="profile_image_source" class="profile_image d-none"
+              (change)="onFileInput($event)"></ion-input>
+            <ion-avatar>
+              <img [src]="userImagePlaceholder" alt="" (click)="selectFile()" />
+            </ion-avatar>
+          </ion-col>
+        </ion-row>
+
+        <ion-row>
+          <ion-col>
+            <ion-item fill="outline" color="medium">
+              <ion-label position="floating">First Name</ion-label>
+              <ion-input formControlName="firstname" type="text" placeholder="First Name"></ion-input>
+            </ion-item>
+            <span class="error" *ngIf="isSubmitted && errorControl.firstname.errors?.required">
+              First Name is required.
+            </span>
+          </ion-col>
+          <ion-col>
+            <ion-item fill="outline" color="medium">
+              <ion-label position="floating">Last Name</ion-label>
+              <ion-input formControlName="lastname" type="text" placeholder="Last Name"></ion-input>
+            </ion-item>
+            <span class="error" *ngIf="isSubmitted && errorControl.lastname.errors?.required">
+              Last Name is required.
+            </span>
+          </ion-col>
+        </ion-row>
+
+        <ion-row>
+          <ion-col>
+            <ion-item fill="outline" color="medium">
+              <ion-label position="floating">Email</ion-label>
+              <ion-input formControlName="email" autocomplete="off" type="email" placeholder="Email"></ion-input>
+            </ion-item>
+            <span class="error" *ngIf="isSubmitted && errorControl.email.errors?.required">
+              Email is required.
+            </span>
+          </ion-col>
+          <ion-col>
+            <ion-item fill="outline" color="medium">
+              <ion-label position="floating">Password</ion-label>
+              <ion-input formControlName="password" *ngIf="showPwd" autocomplete="off" type="text" placeholder="Password"></ion-input>
+              <ion-input formControlName="password" *ngIf="!showPwd" autocomplete="off" type="password" placeholder="Password"></ion-input>
+              <ion-button clear color="dark" type="button" item-right (click)="showPwd=!showPwd" class="psw-button"> 
+                <ion-icon name="eye-outline" *ngIf="showPwd"> </ion-icon>
+                <ion-icon name="eye-off-outline" *ngIf="!showPwd"> </ion-icon> 
+              </ion-button>
+            </ion-item>
+            <span class="error" *ngIf="isSubmitted && errorControl.password.errors?.required">
+              Password is required.
+            </span>
+            <ion-text *ngIf="editID > 0" color="medium" style="margin-top:4px;display:block;">(Note: Leave it empty if you do not want to change password)</ion-text>
+          </ion-col>
+        </ion-row>
+
+        <ion-row>
+          <ion-col>
+            <ion-item fill="outline" color="medium">
+              <ion-label position="floating">Phone</ion-label>
+              <ion-input formControlName="phonenumber" type="tel" placeholder="Phone"></ion-input>
+            </ion-item>
+            <span class="error" *ngIf="isSubmitted && errorControl.phonenumber.errors?.required">
+              Phone is required.
+            </span>
+          </ion-col>
+          <ion-col>
+            <ion-item fill="outline" color="medium">
+              <ion-label position="floating">Line ID</ion-label>
+              <ion-input formControlName="line_id" type="text" placeholder="Line ID"></ion-input>
+            </ion-item>
+
+          </ion-col>
+
+        </ion-row>
+
+        <ion-row>
+          <ion-col>
+            <ion-item fill="outline" color="medium">
+              <ion-label position="floating">Organizations</ion-label>
+              <ion-select formControlName="organization_id" placeholder="Select Organization">
+                <ion-select-option [value]="org.id" *ngFor="let org of organizations">{{org.name}}</ion-select-option>
+              </ion-select>
+            </ion-item>
+          </ion-col>
+          <ion-col>
+            <ion-item fill="outline" color="medium">
+              <ion-label position="floating">Roles</ion-label>
+              <ion-select formControlName="role" placeholder="Select Role">
+                <ion-select-option [value]="rol.roleid" *ngFor="let rol of roles">{{rol.name}}</ion-select-option>
+              </ion-select>
+            </ion-item>
+            <span class="error" *ngIf="isSubmitted && errorControl.role.errors?.required">
+              Role is required.
+            </span>
+          </ion-col>
+
+        </ion-row>
+
+      </ion-grid>
+
+      <br />
+      <br />
+      <div class="text-center">
+        <ion-button shape="round" type="submit" class="login-btn">Submit</ion-button>
+      </div>
+
+
+
+    </form>
+
+  </ng-template>
+
+</ion-modal>
+
+<!-- delete modal -->
+<ion-modal class="dialog-modal height-0" [isOpen]="isModalOpenDelete"
+  (willDismiss)="onWillDismissDelete($event)">
+
+  <ng-template class="ion-padding">
+
+    <div class="close-btn-listing ion-text-right" id="deleteUser" (click)="closeModelDelete()">
+      <ion-icon name="close-outline"></ion-icon>
+    </div>
+
+    <ion-text class="title">Delete User</ion-text>
+
+    <ion-grid>
+
+
+
+      <ion-row>
+
+        <ion-col>
+          <ion-text color="medium">Some data for this staff member needs to be transferred to another user. Please
+            select user where you want to transfer the data.</ion-text>
+          <ion-item fill="outline" color="medium" class="ion-margin-top">
+            <ion-label position="floating">User</ion-label>
+            <ion-select [(ngModel)]="transfer_data_to" placeholder="Select User">
+              <ion-select-option [value]="tr.staffid" *ngFor="let tr of transfer_data_users">{{tr.full_name}}</ion-select-option>
+            </ion-select>
+          </ion-item>
+
+        </ion-col>
+
+      </ion-row>
+
+    </ion-grid>
+
+    <br />
+    <br />
+    <div class="text-center">
+      <ion-button shape="round" type="button" (click)="confirmDelete()" class="login-btn">Confirm</ion-button>
+    </div>
+
+
+  </ng-template>
+
+</ion-modal>

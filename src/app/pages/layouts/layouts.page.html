@@ -1,0 +1,26 @@
+<!-- <ion-menu contentId="Sidebar" side="start" menuId="menu">
+  <ion-header>
+      <ion-toolbar color="primary">
+          <ion-title>Start Menu</ion-title>
+      </ion-toolbar>
+  </ion-header>
+  <ion-content>
+      <ion-menu-toggle>
+          <ion-item (click)="setTitle('Showings')" routerLink="/app/showings">Menu Item</ion-item>
+          <ion-item (click)="setTitle('Leads')" routerLink="/app/leads">Menu Item</ion-item>
+          <ion-item (click)="setTitle('Listings')" routerLink="/app/listings">Menu Item</ion-item>
+      </ion-menu-toggle>
+  </ion-content>
+</ion-menu> -->
+
+<div class="mspapp-layout">
+    
+    <app-sidebar></app-sidebar>
+    
+    <div class="layout-header-with-content {{layoutClass}}">
+        
+        <ion-router-outlet id="Sidebar"></ion-router-outlet>
+    </div>
+
+</div>
+

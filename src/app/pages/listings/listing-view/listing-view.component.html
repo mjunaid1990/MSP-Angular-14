@@ -1,0 +1,414 @@
+<ion-content scrollEvents="true" appAddClassToHeader>
+  <app-header class="splitted-header"></app-header>
+
+  <div class="ion-flex dashboard-design">
+
+    <div class="flex-left dashboard-left" style="padding-top: 30px;">
+
+      <div class="dashboard-left-inner" *ngIf="viewModal && viewModal.id">
+
+        <div class="ion-flex ion-align-items-center ion-justify-content-between title-section ion-margin-bottom">
+          <div class="left-box">
+            <p class="ion-no-margin">
+              <span *ngIf="viewModal.province"> {{viewModal.province}} | </span>
+              <span>MSP - {{viewModal.id}}</span>
+
+
+              <ion-select [ngClass]="statusClass(viewModal.status)" interface="popover"
+                (ionChange)="statusChange($event, viewModal.id)" placeholder="Select Status" [value]="viewModal.status"
+                style="display: inline-flex;">
+                <ion-select-option [value]="sts.id" *ngFor="let sts of statuses">{{sts.name}}</ion-select-option>
+              </ion-select>
+
+
+
+
+            </p>
+
+          </div>
+          <div class="top-verital-line ion-text-right"
+            *ngIf="viewModal.addedfrom && viewModal.addedfrom.staffid == auth.getUser().id">
+            <ion-icon name="ellipsis-horizontal-outline" (click)="openListingMenu()" color="dark"></ion-icon>
+
+
+            <ion-menu-toggle class="custom-small-menu" auto-hide="false" *ngIf="isOpenListingMenu">
+              <ion-list lines="none" class="ion-no-padding">
+                <ion-item routerLink="/app/listings/edit/{{viewModal.id}}" routerDirection="root"
+                  class="ion-no-padding">
+                  Edit
+                </ion-item>
+                <!-- <ion-item class="ion-no-padding" (click)="deleteListing(viewModal.id)">
+                    Delete
+                  </ion-item> -->
+              </ion-list>
+            </ion-menu-toggle>
+
+          </div>
+        </div>
+
+        <div class="gallery-grid-wrap ion-margin-top" *ngIf="viewModal.gallery && viewModal.gallery.length > 0">
+          <div id="gallery-modal" class="ion-grid" style="cursor: pointer;">
+            <div class="grid-item grid-item-main" (click)="openLightBox(0)">
+              <img
+                [src]="viewModal.gallery && viewModal.gallery.length > 0 && viewModal.gallery[0]['image']?viewModal.gallery[0]['image']:userImagePlaceholder"
+                alt="" />
+            </div>
+            <div class="grid-item" (click)="openLightBox(1)" style="margin-bottom: 5px;">
+              <img
+                [src]="viewModal.gallery && viewModal.gallery.length > 1 && viewModal.gallery[1]['image']?viewModal.gallery[1]['image']:userImagePlaceholder"
+                alt="" />
+            </div>
+            <div class="grid-item" (click)="openLightBox(2)" style="margin-bottom: 5px;">
+              <img
+                [src]="viewModal.gallery && viewModal.gallery.length > 2 && viewModal.gallery[2]['image']?viewModal.gallery[2]['image']:userImagePlaceholder"
+                alt="" />
+            </div>
+            <div class="grid-item" (click)="openLightBox(3)">
+              <img
+                [src]="viewModal.gallery && viewModal.gallery.length > 3 && viewModal.gallery[3]['image']?viewModal.gallery[3]['image']:userImagePlaceholder"
+                alt="" />
+            </div>
+            <div class="grid-item" (click)="openLightBox(4)">
+              <img
+                [src]="viewModal.gallery && viewModal.gallery.length > 4 && viewModal.gallery[4]['image']?viewModal.gallery[4]['image']:userImagePlaceholder"
+                alt="" />
+            </div>
+          </div>
+
+          <div class="more-image-wrap">
+            <div class="more-images" *ngIf="viewModal.gallery && viewModal.gallery.length > 0">
+              <ion-icon name="camera-outline" appRemoveIconTitle></ion-icon>
+              <span>{{viewModal.gallery.length}} Photos</span>
+            </div>
+
+            <div class="more-images floorplans" *ngIf="viewModal.floorplans && viewModal.floorplans.length > 0"
+              (click)="openFloorLightBox(0)">
+              <ion-icon name="camera-outline" appRemoveIconTitle></ion-icon>
+              <span>{{viewModal.floorplans.length}} Floorplans</span>
+            </div>
+          </div>
+
+
+
+
+
+        </div>
+
+
+        <div *ngIf="viewModal.gallery && viewModal.gallery.length > 0" style="display: none;">
+
+          <lightgallery id="lightgallery" [settings]="settings" [onBeforeSlide]="onBeforeSlide"
+            [ngStyle]="{'display': display_style}">
+            <a class="gallery-item" [attr.id]="'slider-'+i" *ngFor="let g of viewModal.gallery; let i = index"
+              [attr.data-src]="g.image">
+              <img [src]="g.image" alt="" />
+            </a>
+          </lightgallery>
+
+        </div>
+
+        <div *ngIf="viewModal.floorplans && viewModal.floorplans.length > 0" style="display: none;" id="floorplans">
+
+          <lightgallery id="floorgallery" [settings]="settings" [onBeforeSlide]="onBeforeSlide"
+            [ngStyle]="{'display': display_style}">
+            <a class="floor-item" [attr.id]="'floor-'+i" *ngFor="let g of viewModal.floorplans; let i = index"
+              [attr.data-src]="g.image">
+              <img [src]="g.image" alt="" />
+            </a>
+          </lightgallery>
+
+        </div>
+
+
+        <h2 class="ion-no-margin heading color-green mb-20">{{viewModal.name}}</h2>
+
+        <div class="ion-margin-top prop-sale mb-20" *ngIf="viewModal.house_type || viewModal.prop_type">
+          {{viewModal.house_type | titlecase }} for {{replacePropTypeText(viewModal.prop_type) | lowercase}} </div>
+
+        <div class="right-box mb-20" *ngIf="viewModal.sale_price || viewModal.rent_price">
+          <div>
+            <span *ngIf="viewModal.prop_type === 'buy' && viewModal.sale_price">
+              ฿ {{viewModal.sale_price}}
+            </span>
+            <span *ngIf="viewModal.prop_type === 'Buy' && viewModal.sale_price">
+              ฿ {{viewModal.sale_price}}
+            </span>
+            <span *ngIf="viewModal.prop_type === 'rent' && viewModal.rent_price">
+              ฿ {{viewModal.rent_price}}/m
+            </span>
+            <span *ngIf="viewModal.prop_type === 'Rent' && viewModal.rent_price">
+              ฿ {{viewModal.rent_price}}/m
+            </span>
+            <span *ngIf="viewModal.prop_type === 'Rent, Buy'">
+              <span *ngIf="viewModal.sale_price">
+                ฿ {{viewModal.sale_price}}
+              </span>
+              <span *ngIf="viewModal.rent_price">
+                - ฿ {{viewModal.rent_price}}/m
+              </span>
+            </span>
+          </div>
+        </div>
+
+        <div class="ion-flex ion-align-items-center bed-bath-info mb-20">
+          <div class="ion-flex ion-align-items-center" *ngIf="viewModal.bed">
+            <div class="icon">
+              <svg id="icon-bed" viewBox="0 0 24 24">
+                <g stroke="#222" stroke-width="1.5" fill="none" fill-rule="evenodd">
+                  <path d="M2.25 14.3h19.5m-19.5 3h19.5"></path>
+                  <path
+                    d="M5.838 4.5h12.324c.325 0 .588.263.588.588V9h0-13.5V5.088c0-.325.263-.588.588-.588zM5.25 9l-3 5.25v5.25m19.5 0v-5.25l-3-5.25"
+                    stroke-linecap="round" stroke-linejoin="round"></path>
+                </g>
+              </svg>
+            </div>
+            <span *ngIf="viewModal.bed == '1'">{{viewModal.bed}} bed</span>
+            <span *ngIf="viewModal.bed > '1'">{{viewModal.bed}} beds</span>
+
+
+          </div>
+          <div class="ion-flex ion-align-items-center" *ngIf="viewModal.bath" style="margin-left: 8px;">
+            <div class="icon">
+              <svg id="icon-bath" viewBox="0 0 24 24">
+                <g fill-rule="nonzero" fill="none">
+                  <path
+                    d="M21.75 11.19c0-.746-.718-.682-1.601-.682H4.937v-5.2c0-.598.487-1.085 1.086-1.085h.284c.295 0 .572.12.774.324l-.048.048a2.076 2.076 0 000 2.934l.274.275a.619.619 0 00.877 0l2.712-2.71a.62.62 0 000-.876l-.274-.275a2.064 2.064 0 00-1.469-.607c-.424 0-.828.126-1.17.36a2.33 2.33 0 00-1.676-.712h-.284a2.328 2.328 0 00-2.327 2.325v5.207c-.964-.104-1.446.12-1.446.674 0 .553.341.802 1.024.746v3.704a3.742 3.742 0 002.984 3.658l-.532.532a.62.62 0 10.877.876l1.334-1.331h8.126l1.334 1.331a.618.618 0 00.877 0 .62.62 0 000-.876l-.532-.532a3.742 3.742 0 002.984-3.658v-3.704c.683 0 1.024-.249 1.024-.746zM9.27 4.476c.17 0 .335.043.48.123L7.623 6.714a.986.986 0 01.168-1.177l.775-.772a.99.99 0 01.703-.29zM19.5 15.37c0 1.397-1.123 2.533-2.502 2.533H7.002c-1.38 0-2.502-1.136-2.502-2.533v-3.435h15v3.435z"
+                    stroke="#222" stroke-width=".2" fill="#222"></path>
+                  <path
+                    d="M9.677 7.782l-.251-.25a.25.25 0 00-.353 0 .247.247 0 000 .351l.251.25a.25.25 0 00.353-.35zm1.249-.249a.25.25 0 00-.353 0 .247.247 0 000 .35l.251.25a.25.25 0 00.353-.35l-.251-.25zm-.353-1.493a.247.247 0 000 .351l.251.25a.25.25 0 00.353-.35l-.251-.25a.25.25 0 00-.353 0z"
+                    fill="#53627C"></path>
+                </g>
+              </svg>
+            </div>
+            <span *ngIf="viewModal.bath == '1'">{{viewModal.bath}} bath</span>
+            <span *ngIf="viewModal.bath > '1'">{{viewModal.bath}} baths</span>
+
+          </div>
+          <div class="ion-flex ion-align-items-center" *ngIf="viewModal.sqm" style="margin-left: 8px;">
+            <div class="icon">
+              <svg id="icon-area" viewBox="0 0 24 24">
+                <g transform="translate(4 4)" fill="none" fill-rule="evenodd">
+                  <path
+                    d="M8.205 8.327a.633.633 0 01.894 0l2.945 2.945-.003-1.605a.633.633 0 111.266.002v3.128a.633.633 0 01-.632.632H9.547a.633.633 0 11-.003-1.267l1.606.004-2.945-2.945a.633.633 0 010-.894zm-.457-.457a.633.633 0 01-.894 0L3.909 4.925l.003 1.606a.633.633 0 11-1.266-.003V3.4c0-.348.283-.632.632-.632h3.128a.633.633 0 11.003 1.267L4.803 4.03l2.945 2.945a.633.633 0 010 .894z"
+                    fill="#53627C"></path>
+                  <rect stroke="#222" stroke-width="1.5" width="16" height="16" rx="3.2"></rect>
+                </g>
+              </svg>
+            </div>
+            <span>{{viewModal.sqm}} (m<sup>2</sup>)</span>
+
+          </div>
+        </div>
+
+        <div class="desc-section mb-25">
+          <div class="title ion-margin-top">{{viewModal.house_type | titlecase }} <br />Description </div>
+
+          <div class="desc"
+            *ngIf="viewModal.auto_generated_desc && viewModal.addedfrom.staffid != auth.getUser().staffid">
+            <div [innerHTML]="viewModal.auto_generated_desc"></div>
+          </div>
+
+          <div class="desc" *ngIf="viewModal.description && viewModal.addedfrom.staffid == auth.getUser().staffid">
+            <div [innerHTML]="viewModal.description"></div>
+          </div>
+
+        </div>
+
+
+
+
+        <div class="features-section mb-25" *ngIf="viewModal.features_view && viewModal.features_view.length > 0">
+          <div class="title ion-margin-top">{{viewModal.house_type | titlecase }} <br />Features </div>
+
+
+          <div class="ion-grid-features ion-margin-top features mb-25">
+            <div class="feature-box" *ngFor="let fe of viewModal.features_view">
+              <label for="feature-{{fe.slug}}" class="custom {{fe.slug}}"></label>
+              <span class="feature-name">{{fe.name}}</span>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="map-section mb-25" *ngIf="viewModal.map_url">
+          <div class="title ion-margin-top">{{viewModal.house_type | titlecase }} <br /> Location </div>
+
+          <div class="gmap ion-margin-top">
+            <google-map #mymap [options]="googleOptions" height="250px" width="75%" style="border-radius: 12px;">
+              <map-marker #markerElem="mapMarker" *ngFor="let marker of markers" [position]="marker.position"
+                [label]="marker.label" [title]="marker.title" [options]="marker.options">
+              </map-marker>
+            </google-map>
+          </div>
+
+        </div>
+
+        <div class="listing-agent-wrap mb-25" *ngIf="viewModal.project_members && viewModal.project_members.length > 0">
+          <div class="title ion-margin-top">Contact <br />Agent </div>
+
+          <div class="swiper-button-prevs" (click)="slidePrev()" *ngIf="viewModal.project_members.length > 1">
+            <ion-icon name="chevron-back-outline"></ion-icon>
+          </div>
+          <div class="swiper-button-nexts" (click)="slideNext()" *ngIf="viewModal.project_members.length > 1">
+            <ion-icon name="chevron-forward-outline"></ion-icon>
+          </div>
+
+          <ion-slides #mySlider class=" ion-margin-top" [options]="slideOpts">
+
+
+
+            <ion-slide class="listing-agent-box ion-margin-bottom"
+              *ngFor="let currentUser of viewModal.project_members">
+              <div class="agent-inner">
+                <div class="agent-header">
+                  <div class="usr-info">
+                    <span class="org">{{currentUser.org_name}}</span>
+                    <img [src]="currentUser.profile_image" alt="" />
+                  </div>
+                </div>
+                <div class="agent-body">
+                  <div class="name">{{currentUser.firstname}} {{currentUser.lastname}}</div>
+                  <div>{{currentUser.email}}</div>
+                  <div>{{currentUser.phonenumber}}</div>
+                </div>
+              </div>
+            </ion-slide>
+          </ion-slides>
+
+        </div>
+
+
+      </div>
+
+
+
+    </div>
+    <div class="flex-right dashboard-right" style="padding-top: 30px;">
+
+
+      <div class="shareable-section lead-section mb-25">
+
+        <div class="title ion-margin-top">Where this listing is displayed online </div>
+
+        <div *ngIf="viewModal.status == '2' || viewModal.status == '3';else noShare;">
+
+          <div *ngIf="viewModal.shareables && viewModal.shareables.length > 0">
+            <div class="ion-flex ion-align-items-center ion-justify-content-between ion-margin-top"
+              *ngFor="let sharelink of viewModal.shareables">
+              
+              <div class="ion-left">
+                <div class="ion-flex ion-align-items-center">
+                  <img [src]="sharelink.icon" alt="" style="height: 24px; margin-right: 10px;" />
+                  <div class="website">{{sharelink.website}}</div>
+                </div>
+              </div>
+              <div class="ion-right">
+                <ion-icon name="copy-outline" appCopyTextClipboard [copy]="sharelink.url"></ion-icon>
+              </div>
+            </div>
+          </div>
+        </div>
+        <ng-template class="lead-overflow ion-margin-top" #noShare>
+          <p class="no-data">This listing is not live</p>
+        </ng-template>
+
+      </div>
+
+
+
+      <div class="lead-section mb-25">
+        <div class="title ion-margin-top">Leads generated for this listing </div>
+
+
+        <div class="lead-overflow ion-margin-top"
+          *ngIf="viewModal.leads && viewModal.leads.length > 0 && viewModal.addedfrom.staffid == auth.getUser().staffid">
+
+          <div class="ion-flex ion-align-items-center ion-justify-content-between ion-margin-top"
+            *ngFor="let lead of viewModal.leads">
+            <div class="ion-left">
+              <div class="lead-name">{{lead.name}}</div>
+              <div class="lead-status">
+                <span class="date">{{lead.date | date}}</span>
+                <span class="status" *ngIf="lead.status">{{lead.status.name}}</span>
+              </div>
+            </div>
+            <div class="ion-right">
+              <ion-button fill="clear" type="string" color="success" href="#">View</ion-button>
+            </div>
+          </div>
+
+        </div>
+        <div class="lead-overflow ion-margin-top" *ngIf="viewModal.leads && viewModal.leads.length == 0">
+
+          <p class="no-data">No leads found</p>
+
+        </div>
+
+      </div>
+
+      <div class="note-section mb-25">
+        <div class="title ion-margin-top ion-margin-bottom">Notes </div>
+
+        <div class="notes-wrap" *ngIf="viewModal.notes && viewModal.notes.length > 0;else noNotes">
+          <div class="notes-loop" *ngFor="let note of viewModal.notes">
+            <div><small>{{note.date | date:'short' }}</small></div>
+            <div class="note-content">
+              <p>{{note.content}}</p>
+              <div class="ion-flex ion-align-items-center ion-justify-content-between">
+                <div class="desc">{{note.staff_name}}</div>
+                <div class="action">
+                  <ion-icon name="pencil" (click)="editNote(note)"></ion-icon>
+                </div>
+              </div>
+            </div>
+            
+          </div>
+        </div>
+
+      </div>
+      <ng-template #noNotes>
+        <p class="no-data">No data found</p>
+      </ng-template>
+
+      <br />
+      <ion-button size="small" class="ion-no-padding ion-no-margin btn-no-background" color="primary" fill="clear"
+        (click)="OpenModal()" style="font-size: 11px; text-transform: capitalize;">
+        <ion-icon name="add-outline"></ion-icon>
+        Add Note
+      </ion-button>
+
+
+
+
+
+    </div>
+
+
+
+  </div>
+
+
+
+
+
+
+</ion-content>
+
+<ion-modal #modal trigger="notes-modal" class="showing-modal" [isOpen]="isModalOpen" (willDismiss)="onWillDismiss($event)">
+  <ng-template class="ion-padding">
+    <div class="close-btn-listing ion-text-right" id="closeFormModel" (click)="closeModel()">
+      <ion-icon name="close-outline"></ion-icon>
+    </div>
+
+    <ion-text class="title">Add/Edit Note</ion-text>
+    <form [formGroup]="form" (ngSubmit)="submitForm()" novalidate class="ion-padding">
+      <ion-textarea formControlName="content" rows="5" class="input"
+        placeholder="type here..."></ion-textarea>
+      <br />
+      <div class="ion-text-end">
+        <ion-button type="submit" color="tertiary" shape="round" size="small" [disabled]="isSubmitted">Save</ion-button>
+      </div>
+    </form>
+    
+  </ng-template>
+</ion-modal>

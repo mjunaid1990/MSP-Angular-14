@@ -1,0 +1,240 @@
+
+<ion-content scrollEvents="true" appAddClassToHeader>
+    <app-header class="splitted-header" ></app-header>
+
+    <div class="ion-flex dashboard-design">
+        <div class="flex-left dashboard-left">
+
+            
+            <h1>Welcome Back, {{auth.getUser().firstname}}</h1>
+            <br />
+            <ion-text color="dark" class="break-text-line ion-block ion-margin-top ion-margin-bottom ">
+                Here you can see a breakdown of your organizations's activity
+                and leads. To generate more leads try to create a listing.
+            </ion-text>
+            <br />
+            <ion-button color="success" [routerLink]="['/app/listings/add']" routerDirection="root" shape="round" class="success-custom-btn">Create Listing</ion-button>
+
+            <br />
+            <br />
+
+            <div class="statsoverview">
+                <div class="ion-flex ion-justify-content-between ion-align-items-center">
+                    <div class="ion-left">
+                        <h5>Overview</h5>
+                    </div>
+                    <div class="ion-right">
+                        
+                    </div>
+                </div>
+                <br />
+
+                <div class="small-white-boxes">
+                    <div class="box">
+                        <div class="count">{{dashboard_res.active_listings}}</div>
+                        <div class="name">Active Listings</div>
+                    </div>
+                    <div class="box">
+                        <div class="count">{{dashboard_res.active_leads}}</div>
+                        <div class="name">New Leads</div>
+                    </div>
+                    <div class="box">
+                        <div class="count">N/A</div>
+                        <div class="name">New Owner Leads</div>
+                    </div>
+                    <div class="box">
+                        <div class="count">N/A</div>
+                        <div class="name">Outstanding Tasks</div>
+                    </div>
+                    <div class="box">
+                        <div class="count">N/A</div>
+                        <div class="name">Upcoming Showings</div>
+                    </div>
+                </div>
+
+            </div>
+            <br />
+            <div class="statsoverview">
+                <div class="ion-flex ion-justify-content-between ion-align-items-center">
+                    <div class="ion-left">
+                        <h5>Productivity</h5>
+                    </div>
+                    <div class="ion-right">
+                        <ion-select placeholder="Select Duration" interface="popover" value="7d" (ionChange)="changeDuration($event)">
+                            <ion-select-option value="7d">Last 7 days</ion-select-option>
+                            <ion-select-option value="12m">Last 12 month</ion-select-option>
+                            <ion-select-option value="custom">Custom</ion-select-option>
+                        </ion-select>
+                        <!-- <ion-buttons slot="end">
+                            <ion-button shape="round" color="dark">
+                                01-07- May
+                                <ion-icon name="chevron-down-outline" slot="end"></ion-icon>
+                            </ion-button>
+                        </ion-buttons> -->
+                    </div>
+                </div>
+
+                <div class="ion-flex">
+                    <div class="ion-left ion-flex-left">
+                        <div id="chart" *ngIf="isChartDataReceived">
+                            <div style="text-align:center">
+                                <apx-chart [series]="chartOptions.series" [chart]="chartOptions.chart"
+                                    [xaxis]="chartOptions.xaxis" [title]="chartOptions.title"
+                                    [yaxis]="chartOptions.yaxis" [dataLabels]="chartOptions.dataLabels"
+                                    [plotOptions]="chartOptions.plotOptions" [grid]="chartOptions.grid"
+                                    [stroke]="chartOptions.stroke" [fill]="chartOptions.fill" [legend]="chartOptions.legend" ></apx-chart>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="ion-right ion-flex-right ion-flex ion-align-items-center ion-justify-content-center">
+                        <div class="ion-flex ion-column">
+                            <div class="transaparent-box">
+                                <div class="badge-orange"></div>
+                                <div class="count">{{chart_listing_count}}</div>
+                                <div class="name">Listings</div>
+                            </div>
+                            <div class="transaparent-box">
+                                <div class="badge-cyan"></div>
+                                <div class="count">{{chart_lead_count}}</div>
+                                <div class="name">Leads</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+
+
+
+
+        </div>
+        <div class="flex-right dashboard-right" (window:resize)="onResize($event)">
+
+
+            <div class="ion-slider-wrap" [ngStyle]="{'height.px': boxHeight}">
+
+    
+                <div class="boxes">
+                    <div class="dbox help" [ngStyle]="{'width.px': boxWidth}" style="background-image: url('/assets/stairs.png');">
+                      <a href="#">Need Help? <br />Contact Support</a>
+                    </div>
+                    <div class="dbox deal" [ngStyle]="{'width.px': boxWidth}" style="background-image: url('/assets/bar-g.png');">
+                        <a href="#">Stay on top of <br />potential deals</a>
+                    </div>
+                    <div class="dbox track" [ngStyle]="{'width.px': boxWidth}" style="background-image: url('/assets/nofee.png');">
+                        <a href="#">Track your <br />performance and <br />get insights</a>
+                    </div>
+                    
+                  </div>
+            </div>
+
+            <br />
+            <br />
+            <div class="calendar-section">
+                <div class="ion-flex ion-justify-content-between ion-align-items-center">
+                    <div class="ion-left">
+
+                        <ion-select placeholder="Select month" interface="popover" [value]="month" (ionChange)="changeMonth($event)">
+                            <ion-select-option [value]="mo.value" *ngFor="let mo of months">{{mo.name}} {{today | date:'YYYY' }}</ion-select-option>
+                        </ion-select>
+
+                        <!-- <h5>{{today | date:'LLLL' }} {{today | date:'YYYY' }}</h5> -->
+                    </div>
+                    <div class="ion-right">
+                        <ion-buttons slot="end">
+                            <ion-button shape="round" color="dark" (click)="slidePrev()">
+                                <ion-icon name="chevron-back-outline" slot="end"></ion-icon>
+                            </ion-button>
+                            <ion-button shape="round" color="dark" (click)="slideNext()">
+                                <ion-icon name="chevron-forward-outline" slot="end"></ion-icon>
+                            </ion-button>
+                        </ion-buttons>
+                    </div>
+                </div>
+
+                <br />
+
+                <div class="calendar-days-cal" *ngIf="calendar_data && calendar_data.length > 0">
+                    <ion-slides id="new" pager="false" [options]="slideOptsCal" #calSlider>
+                        <ion-slide *ngFor="let cal of calendar_data; let i = index">
+                            <div class="day-wrap" (click)="showLeads(cal.date, i)">
+                                <div class="day-name">{{cal.day_of_week}}</div>
+                                <div class="day-num">{{cal.day}}</div>
+                            </div>
+                        </ion-slide>
+                    </ion-slides>
+                </div>
+
+
+            </div>
+
+            <br />
+            <br />
+            <br />
+
+            <div class="schedule-section">
+                <div class="ion-flex ion-justify-content-between ion-align-items-center">
+                    <div class="ion-left">
+                        <h5>Leads</h5>
+                    </div>
+                    <div class="ion-right">
+                        <ion-buttons slot="end">
+                            <ion-button routerLink="/app/leads" routerDirection="root" shape="round" color="dark">
+                                See all
+                            </ion-button>
+                        </ion-buttons>
+                    </div>
+                </div>
+
+
+                <div class="events-list" *ngIf="today_leads && today_leads.length > 0; else emptyLead">
+                    <ion-list lines="none">
+                        <ion-item routerLink="/app/leads/view/{{lead.id}}" *ngFor="let lead of today_leads">
+                            <div class="icon-box bg-orange">
+                                <img [src]="lead.image" alt="" />
+                            </div>
+                            
+                            <ion-label>
+                                <h3>{{lead.name}}</h3>
+                                <div>
+                                    <span>{{lead.phonenumber}}</span>
+                                </div>
+                            </ion-label>
+                            <ion-icon name="time-outline"></ion-icon> {{lead.time_ago}}
+                        </ion-item>
+                        
+                        
+                      </ion-list>
+                </div>
+                <ng-template #emptyLead>
+                    <ion-list lines="none">
+                        <ion-item style="--padding-start: 0 !important;">
+                            <ion-label style="color: gray; font-family: 'GTEestiProDisplay-Regular';">
+                                Nothing to show on the selected date
+                            </ion-label>
+                        </ion-item>
+                      </ion-list>
+                </ng-template>
+
+            </div>
+            
+
+        </div>
+    </div>
+
+    
+</ion-content>
+<ion-popover #popover trigger="date" size="cover" [isOpen]="isDateRangeModalOpen">
+    <ng-template>
+        <ion-calendar [(ngModel)]="dateRange" [options]="optionsRange" [type]="type" (change)="onChange($event)"
+            [format]="'YYYY-MM-DD'">
+        </ion-calendar>
+        <div class="btn-group ion-text-end">
+            <ion-button color="primary" shape="round" (click)="isDateRangeModalOpen=false" fill="outline" style="display: inline-block;">Close</ion-button>
+            <ion-button color="primary" shape="round" (click)="updateDate()" style="display: inline-block;">Done</ion-button>
+        </div>
+        
+    </ng-template>
+</ion-popover>

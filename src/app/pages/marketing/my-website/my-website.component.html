@@ -1,0 +1,281 @@
+<ion-content scrollEvents="true" appAddClassToHeader>
+  <app-header class="splitted-header"></app-header>
+
+  <div class="ion-flex dashboard-design">
+    <div class="flex-left dashboard-left">
+      <div class="ion-flex ion-align-items-center ion-justify-content-between">
+        <h4>My Website</h4>
+      </div>
+
+      <br />
+
+
+      <form [formGroup]="form" class="org-detail-form" (ngSubmit)="submitForm()">
+
+        <h4 class="title">Organization Details</h4>
+        <br />
+
+        <div class="flex-input">
+          <div class="left-input">
+            <ion-label>Organization Name</ion-label>
+            <ion-input formControlName="name"></ion-input>
+          </div>
+          <div class="right-input">
+            <ion-label>Website</ion-label>
+            <ion-input formControlName="website"></ion-input>
+            <div *ngIf="form.get('website').hasError('pattern')"class="text-danger ion-margin-bottom">
+              Invalid URL format.
+            </div>
+          </div>
+        </div>
+
+        <div class="flex-input">
+          <div class="left-input">
+            <ion-label>Office / Physical Address</ion-label>
+            <ion-input formControlName="address"></ion-input>
+          </div>
+          <div class="right-input">
+            <ion-label>Office Phone No</ion-label>
+            <ion-input formControlName="o_phone"></ion-input>
+          </div>
+        </div>
+        
+        <div class="flex-input">
+          <div class="left-input">
+            <ion-label>Line Official ID</ion-label>
+            <ion-input formControlName="o_line_id"></ion-input>
+          </div>
+          <div class="right-input">
+            <ion-label>Whatsapp No.</ion-label>
+            <ion-input formControlName="whatsapp_no"></ion-input>
+          </div>
+        </div>
+        
+        <div class="flex-input">
+          <div class="left-input">
+            <ion-label>Meta (Facebook) Url</ion-label>
+            <ion-input formControlName="meta_fb_url"></ion-input>
+          </div>
+          <div class="right-input">
+            <ion-label>Contact Email</ion-label>
+            <ion-input formControlName="contact_email"></ion-input>
+          </div>
+        </div>
+
+        <div class="flex-input">
+          <div class="left-input">
+            <ion-label>Province</ion-label>
+            <ion-select formControlName="province" interface="popover" placeholder="Select..." multiple="true" >
+              <ion-select-option [value]="opt.name" *ngFor="let opt of provinces_d">{{opt.name}}</ion-select-option>
+            </ion-select>
+          </div>
+          <div class="right-input">
+            
+          </div>
+        </div>
+        
+
+        <h4 class="title">Logos & Images</h4>
+        <br />
+
+        <div class="flex-input">
+          <div class="left-input">
+            <ion-label>Logo</ion-label>
+            <div class="files-grid">
+              <div class="add-new-file" (click)="mediaFile.click()">
+                <input type="file" accept="image/*,webp" id="mediaFile" #mediaFile
+                  (change)="onSelectFile(mediaFile.files)" style="display: none;">
+
+                <ion-icon name="images-outline" *ngIf="logo_image == '' "></ion-icon>
+                <img [src]="logo_image" alt="" *ngIf="logo_image != '' " />
+              </div>
+            </div>
+          </div>
+          <div class="right-input">
+            <ion-label>Light Logo</ion-label>
+            <div class="files-grid">
+              <div class="add-new-file" (click)="mediaFileLight.click()">
+                <input type="file" accept="image/*,webp" id="mediaFileLight" #mediaFileLight
+                  (change)="onSelectFileLogoLight(mediaFileLight.files)" style="display: none;">
+
+                <ion-icon name="images-outline" *ngIf="light_logo_image == '' "></ion-icon>
+                <img [src]="light_logo_image" alt="" *ngIf="light_logo_image != '' " />
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="flex-input">
+          <div class="left-input">
+            <ion-label>Mobile Logo</ion-label>
+            <div class="files-grid">
+              <div class="add-new-file" (click)="mediaFile2.click()">
+                <input type="file" accept="image/*,webp" id="mediaFile2" #mediaFile2
+                  (change)="onSelectFileMobile(mediaFile2.files)" style="display: none;">
+
+                <ion-icon name="images-outline" *ngIf="mobile_logo_image == '' "></ion-icon>
+                <img [src]="mobile_logo_image" alt="" *ngIf="mobile_logo_image != '' " />
+              </div>
+            </div>
+          </div>
+          <div class="right-input">
+            <ion-label>Mobile Light Logo</ion-label>
+            <div class="files-grid">
+              <div class="add-new-file" (click)="mediaFileM.click()">
+                <input type="file" accept="image/*,webp" id="mediaFileM" #mediaFileM
+                  (change)="onSelectFileMobileLight(mediaFileM.files)" style="display: none;">
+
+                <ion-icon name="images-outline" *ngIf="mobile_light_logo_image == '' "></ion-icon>
+                <img [src]="mobile_light_logo_image" alt="" *ngIf="mobile_light_logo_image != '' " />
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="flex-input">
+          <div class="left-input">
+            <ion-label>Favicon</ion-label>
+            <div class="files-grid">
+              <div class="add-new-file" (click)="mediaFile3.click()">
+                <input type="file" accept="image/*,webp" id="mediaFile3" #mediaFile3
+                  (change)="onSelectFileFav(mediaFile3.files)" style="display: none;">
+
+                <ion-icon name="images-outline" *ngIf="fav_icon_image == '' "></ion-icon>
+                <img [src]="fav_icon_image" alt="" *ngIf="fav_icon_image != '' " />
+              </div>
+            </div>
+          </div>
+          <div class="right-input"></div>
+        </div>
+
+        <h4 class="title">Settings</h4>
+        <br />
+
+        
+        <div class="flex-input">
+          <div class="left-input">
+            <ion-label>Background Color</ion-label>
+            <div class="ion-flex">
+              <div class="color-box">
+                <input type="color" class="color" formControlName="o_color_dum" (input)="updateColor($event)" />
+              </div>
+              <div class="color-value" style="margin-top: -4px; margin-left: 5px;">
+                <ion-input formControlName="o_color"></ion-input>
+              </div>
+            </div>
+          </div>
+          <div class="right-input">
+            <ion-label>Website Language</ion-label>
+            <ion-select formControlName="website_language" interface="popover">
+              <ion-select-option value="english">English</ion-select-option>
+              <ion-select-option value="thai">Thai</ion-select-option>
+            </ion-select>
+          </div>
+        </div>
+
+        <div class="flex-input">
+          <div class="left-input">
+            <ion-label>Meta Title (en)</ion-label>
+            <ion-input formControlName="en_meta_title"></ion-input>
+          </div>
+          <div class="right-input">
+            <ion-label>Meta Title (th)</ion-label>
+            <ion-input formControlName="th_meta_title"></ion-input>
+          </div>
+        </div>
+
+        <h4 class="title">About Us</h4>
+        <br />
+
+        <ion-label>About Title</ion-label>
+        <ion-input formControlName="about_us_title"></ion-input>
+
+        <ion-label>About Us Content</ion-label>
+        <ion-textarea formControlName="about_us" rows="5"></ion-textarea>
+
+        <div class="flex-input">
+          <div class="left-input">
+            <ion-label>About Header Image</ion-label>
+            <div class="files-grid">
+              <div class="add-new-file" (click)="mediaFileAbout2.click()">
+                <input type="file" accept="image/*,webp" id="mediaFileAbout" #mediaFileAbout2
+                  (change)="onSelectFileAboutImage2(mediaFileAbout2.files)" style="display: none;">
+
+                <ion-icon name="images-outline" *ngIf="about_image_2 == '' "></ion-icon>
+                <img [src]="about_image_2" alt="" *ngIf="about_image_2 != '' " />
+              </div>
+            </div>
+          </div>
+          <div class="right-input">
+            <ion-label>About Secondary Image</ion-label>
+            <div class="files-grid">
+              <div class="add-new-file" (click)="mediaFileAbout.click()">
+                <input type="file" accept="image/*,webp" id="mediaFileAbout" #mediaFileAbout
+                  (change)="onSelectFileAboutImage(mediaFileAbout.files)" style="display: none;">
+
+                <ion-icon name="images-outline" *ngIf="about_image == '' "></ion-icon>
+                <img [src]="about_image" alt="" *ngIf="about_image != '' " />
+              </div>
+            </div>
+            
+          </div>
+        </div>
+
+        <h4 class="title">Featured Listings</h4>
+        <br />
+        
+        <ion-label>Select Listings (Max 6)</ion-label>
+        <div class="ion-position-relative">
+          <div class="tags-input">
+            <div class="tags-flex">
+              <div class="tag" *ngFor="let tag of selectedProjects; let i=index;">
+                {{tag.name}}
+                <span class="remove" (click)="removeSel(i)"></span>
+              </div>
+            </div>
+            
+
+            <ion-input (input)="searchProperties($event)" formControlName="featured_properties"
+              placeholder="Search listings by ID or name..."></ion-input>
+          </div>
+          
+
+          <div class="multi-level-menu-wrap" #insideElement [ngClass]="{'open': isToggleSearchBox }">
+            <div class="menu" *ngIf="projects && projects.length > 0;else noPropeties">
+              <div class="parent" *ngFor="let prop of projects" (click)="selectProp(prop)">#{{prop.id}} -
+                {{prop.name}}</div>
+            </div>
+            <ng-template #noPropeties>
+              <div id="menu">
+                <div class="parent">No properties found</div>
+              </div>
+            </ng-template>
+          </div>
+        </div>
+
+        <br />
+        <ion-label>New Listing Contact</ion-label>
+        <ion-select formControlName="new_listing_contact" interface="popover">
+          <ion-select-option [value]="stf.email" *ngFor="let stf of staffList">{{stf.email}}
+          </ion-select-option>
+        </ion-select>
+        <br />
+        <ion-button shape="round" type="submit" color="primary" [disabled]="isSubmitted">Save</ion-button>
+        <br />
+        <br />
+      </form>
+
+    </div>
+    <div class="flex-right dashboard-right">
+      <h5>Your Websites Traffic</h5>
+      <p>Not connected</p>
+
+      <br />
+
+      <h5>Traffic Sources</h5>
+      <p>Not connected</p>
+
+    </div>
+    
+  </div>
+
+
+</ion-content>

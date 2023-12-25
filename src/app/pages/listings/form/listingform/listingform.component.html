@@ -1,0 +1,736 @@
+<ion-content #content scrollEvents="true" appAddClassToHeader>
+  <app-header class="white-header"></app-header>
+  <form [formGroup]="form" (ngSubmit)="submitForm()" novalidate>
+
+    <div class="listing-crud-design" >
+      <div class="dashboard-white">
+
+        <div class="ion-flex ion-align-items-center ion-justify-content-between title-section ion-margin-bottom" *ngIf="viewModal && viewModal.id">
+          <div class="left-box">
+            <p class="ion-no-margin">
+              <span *ngIf="viewModal.province"> {{viewModal.province}} | </span>
+              <span>MSP - {{viewModal.id}}</span>
+  
+              
+              <ion-select [ngClass]="statusClass(viewModal.status)" interface="popover" (ionChange)="statusChange($event, viewModal.id)"
+                placeholder="Select Status" [value]="viewModal.status" style="display: inline-flex;">
+                  <ion-select-option [value]="sts.id"
+                      *ngFor="let sts of editstatuses">{{sts.name}}</ion-select-option>
+              </ion-select>
+              
+  
+              
+  
+            </p>
+            
+          </div>
+        </div>
+        
+
+        <p>Create a new listing by adding details below,
+          adding as much detail in multiple languages will ensure your listing is uploaded to as many
+          connected websites as possible</p>
+        <div class="gallery-grid-wrap">
+          <div id="gallery-modal" class="ion-grid" style="cursor: pointer;">
+            <div class="grid-item grid-item-main">
+              <img
+                [src]="main_images_list && main_images_list.length > 0 && main_images_list[0]['image']?main_images_list[0]['image']:userImagePlaceholder"
+                alt="" />
+            </div>
+            <div class="grid-item" style="margin-bottom: 5px;">
+              <img
+                [src]="main_images_list && main_images_list.length > 1 && main_images_list[1]['image']?main_images_list[1]['image']:userImagePlaceholder"
+                alt="" />
+            </div>
+            <div class="grid-item" style="margin-bottom: 5px;">
+              <img
+                [src]="main_images_list && main_images_list.length > 2 && main_images_list[2]['image']?main_images_list[2]['image']:userImagePlaceholder"
+                alt="" />
+            </div>
+            <div class="grid-item">
+              <img
+                [src]="main_images_list && main_images_list.length > 3 && main_images_list[3]['image']?main_images_list[3]['image']:userImagePlaceholder"
+                alt="" />
+            </div>
+            <div class="grid-item">
+              <img
+                [src]="main_images_list && main_images_list.length > 4 && main_images_list[4]['image']?main_images_list[4]['image']:userImagePlaceholder"
+                alt="" />
+            </div>
+          </div>
+
+          <div class="more-images" *ngIf="main_images_list && main_images_list.length > 0">
+            <ion-icon name="camera-outline" appRemoveIconTitle></ion-icon>
+            <span>{{main_images_list.length}} Photos</span>
+          </div>
+          
+
+        </div>
+
+        <ion-row>
+          <ion-col size="7" style="margin-right: 25px;">
+
+            <div class="simple-input-large ion-flex color-success">
+              <span *ngIf="isSubmitted && errorControl.name.errors?.required">*</span>
+              <input type="text" formControlName="name" placeholder="Listing title" />
+            </div>
+            <ion-button size="small" class="ion-no-padding ion-no-margin btn-no-background" color="primary" fill="clear"
+              (click)="toggleThaiInput()" *ngIf="!thai_input" style="font-size: 11px; text-transform: capitalize;">
+              add thai title
+              <img src="/assets/flag.png" alt="" style="width: 15px; margin-left: 4px;"/>
+            </ion-button>
+
+            <ion-button size="small" class="ion-no-padding ion-no-margin btn-no-background" color="primary" fill="clear"
+              (click)="toggleThaiInput()" *ngIf="thai_input" style="font-size: 11px; text-transform: capitalize;">
+              hide thai title
+              <img src="/assets/flag.png" alt="" style="width: 15px; margin-left: 4px;"/>
+            </ion-button>
+
+            <div class="normal-input" *ngIf="thai_input">
+              <input type="text" formControlName="name_th" placeholder="ชื่ออสังหาริมทรัพย์" />
+            </div>
+
+            <div class="ion-flex ion-align-items-center">
+              <div class="normal-input ion-flex">
+                <span *ngIf="isSubmitted && errorControl.house_type.errors?.required">*</span>
+                <input type="text" formControlName="house_type" placeholder="Property Type" readonly="true" (click)="toggleDropdownMenu()" style="width: 105px" />
+                
+                <div class="multi-level-menu-wrap" [ngClass]="{'open': is_property_type_clicked }">
+                  <ul id="menu">
+                    <li class="parent"><a href="javascript:void(0);" (click)="setHouseType('House')">House</a></li>
+                    <li class="parent"><a href="javascript:void(0);" (click)="setHouseType('Condominium')">Condominium</a></li>
+                    <li class="parent"><a href="javascript:void(0);" (click)="setHouseType('Land')">Land</a></li>
+                    <li class="parent"><a href="javascript:void(0);" (click)="setHouseType('Townhouse')">Townhouse</a></li>
+                    <li class="parent"><a href="javascript:void(0);" (click)="setHouseType('Villa')">Villa</a></li>
+                    <li class="parent"><a href="javascript:void(0);" >
+                      Commercial
+                      <svg xmlns="http://www.w3.org/2000/svg" class="ionicon s-ion-icon" viewBox="0 0 512 512"><title>Caret Forward</title><path d="M190.06 414l163.12-139.78a24 24 0 000-36.44L190.06 98c-15.57-13.34-39.62-2.28-39.62 18.22v279.6c0 20.5 24.05 31.56 39.62 18.18z"></path></svg>
+                    </a>
+                      <ul class="child">
+                        <li><a href="javascript:void(0);" (click)="setHouseType('Office')">Office</a></li>
+                        <li><a href="javascript:void(0);" (click)="setHouseType('Warehouse/Factory')">Warehouse/Factory</a></li>
+                        <li><a href="javascript:void(0);" (click)="setHouseType('Business')">Business</a></li>
+                        <li><a href="javascript:void(0);" (click)="setHouseType('Retail')">Retail</a></li>
+                        <li><a href="javascript:void(0);" (click)="setHouseType('Hotel')">Hotel</a></li>
+                      </ul>
+                    </li>
+                  </ul>
+                </div>
+
+                <!-- <ion-select formControlName="house_type"  interface="popover" (ionChange)="setHouseType($event)" placeholder="Property Type"
+                  class="select-small">
+                  <ion-select-option [value]="prop" *ngFor="let prop of property_types_arr">{{prop}}</ion-select-option>
+                </ion-select> -->
+              </div>
+              <div class="ion-margin-start ion-margin-end">for</div>
+              <div class="normal-input ion-flex">
+                <span *ngIf="isSubmitted && errorControl.listing_type.errors?.required">*</span>
+                <ion-select formControlName="listing_type" interface="popover" (ionChange)="setListingType($event)"
+                  placeholder="Rent / Sale" class="select-small">
+                  <ion-select-option [value]="lt" *ngFor="let lt of listing_types_arr">{{replace_listing_type_text(lt) | titlecase
+                    }}</ion-select-option>
+                </ion-select>
+              </div>
+            </div>
+
+            
+
+            <div class="ion-flex ion-align-items-center">
+              <div class="normal-input ion-flex ion-align-items-center price-input"
+                *ngIf="form.value.listing_type != 'rent' ">
+                <div class="symb" style="font-size: 24px;">฿</div>
+                <span *ngIf="isSubmitted && errorControl.sale_price.errors?.required">*</span>
+                <input class="custom-font" type="text" formControlName="sale_price" (input)="numberWithCommasSale($event)" placeholder="Sale Price"
+                  style="font-size: 24px;" [ngStyle]="{'width': calculateSize(form.value.sale_price.length)}" />
+              </div>
+              <div class="ion-margin-start ion-margin-end" *ngIf="form.value.listing_type == 'Rent, Buy' ">/</div>
+              <div class="normal-input ion-flex ion-align-items-center price-input"
+                *ngIf="form.value.listing_type == 'rent' || form.value.listing_type == 'Rent, Buy' ">
+                <div class="symb" style="font-size: 24px;">฿</div>
+                <span *ngIf="isSubmitted && errorControl.rent_price.errors?.required">*</span>
+                <input class="custom-font" type="text" formControlName="rent_price" (input)="numberWithCommasRent($event)" placeholder="Rent Price"
+                  style="font-size: 24px;" [ngStyle]="{'width': calculateSizeRent(form.value.rent_price.length)}" /><sub>/ month</sub>
+              </div>
+            </div>
+            <div class="ion-flex ion-align-items-center">
+              <div class="normal-input ion-flex ion-align-items-center price-input" *ngIf="form.value.house_type == 'House' || form.value.house_type == 'Villa' || form.value.house_type == 'Townhouse' || form.value.house_type == 'Condominium' || form.value.house_type == 'Hotel' ">
+                <div class="icon">
+                  <svg id="icon-bed" viewBox="0 0 24 24">
+                    <g stroke="#222" stroke-width="1.5" fill="none" fill-rule="evenodd">
+                      <path d="M2.25 14.3h19.5m-19.5 3h19.5"></path>
+                      <path
+                        d="M5.838 4.5h12.324c.325 0 .588.263.588.588V9h0-13.5V5.088c0-.325.263-.588.588-.588zM5.25 9l-3 5.25v5.25m19.5 0v-5.25l-3-5.25"
+                        stroke-linecap="round" stroke-linejoin="round"></path>
+                    </g>
+                  </svg>
+                </div>
+                
+                <span *ngIf="isSubmitted && errorControl.beds.errors?.required">*</span>
+                <input class="custom-font" type="number" step="any" formControlName="beds" placeholder="Beds" style="width: 60px;font-size: 22px;" />
+              </div>
+              <div class="normal-input ion-flex ion-align-items-center price-input" *ngIf="form.value.house_type == 'House' || form.value.house_type == 'Villa' || form.value.house_type == 'Townhouse' || form.value.house_type == 'Condominium' || form.value.house_type == 'Hotel' ">
+                <div class="icon">
+                  <svg id="icon-bath" viewBox="0 0 24 24">
+                    <g fill-rule="nonzero" fill="none">
+                      <path
+                        d="M21.75 11.19c0-.746-.718-.682-1.601-.682H4.937v-5.2c0-.598.487-1.085 1.086-1.085h.284c.295 0 .572.12.774.324l-.048.048a2.076 2.076 0 000 2.934l.274.275a.619.619 0 00.877 0l2.712-2.71a.62.62 0 000-.876l-.274-.275a2.064 2.064 0 00-1.469-.607c-.424 0-.828.126-1.17.36a2.33 2.33 0 00-1.676-.712h-.284a2.328 2.328 0 00-2.327 2.325v5.207c-.964-.104-1.446.12-1.446.674 0 .553.341.802 1.024.746v3.704a3.742 3.742 0 002.984 3.658l-.532.532a.62.62 0 10.877.876l1.334-1.331h8.126l1.334 1.331a.618.618 0 00.877 0 .62.62 0 000-.876l-.532-.532a3.742 3.742 0 002.984-3.658v-3.704c.683 0 1.024-.249 1.024-.746zM9.27 4.476c.17 0 .335.043.48.123L7.623 6.714a.986.986 0 01.168-1.177l.775-.772a.99.99 0 01.703-.29zM19.5 15.37c0 1.397-1.123 2.533-2.502 2.533H7.002c-1.38 0-2.502-1.136-2.502-2.533v-3.435h15v3.435z"
+                        stroke="#222" stroke-width=".2" fill="#222"></path>
+                      <path
+                        d="M9.677 7.782l-.251-.25a.25.25 0 00-.353 0 .247.247 0 000 .351l.251.25a.25.25 0 00.353-.35zm1.249-.249a.25.25 0 00-.353 0 .247.247 0 000 .35l.251.25a.25.25 0 00.353-.35l-.251-.25zm-.353-1.493a.247.247 0 000 .351l.251.25a.25.25 0 00.353-.35l-.251-.25a.25.25 0 00-.353 0z"
+                        fill="#53627C"></path>
+                    </g>
+                  </svg>
+                </div>
+                <span *ngIf="isSubmitted && errorControl.baths.errors?.required">*</span>
+                <input class="custom-font" type="number" step="any" formControlName="baths" placeholder="Baths" style="width: 60px;font-size: 22px;" />
+              </div>
+              <div class="normal-input ion-flex ion-align-items-center price-input" *ngIf="form.value.house_type != 'Land'">
+                <div class="icon">
+                  <svg id="icon-area" viewBox="0 0 24 24">
+                    <g transform="translate(4 4)" fill="none" fill-rule="evenodd">
+                      <path
+                        d="M8.205 8.327a.633.633 0 01.894 0l2.945 2.945-.003-1.605a.633.633 0 111.266.002v3.128a.633.633 0 01-.632.632H9.547a.633.633 0 11-.003-1.267l1.606.004-2.945-2.945a.633.633 0 010-.894zm-.457-.457a.633.633 0 01-.894 0L3.909 4.925l.003 1.606a.633.633 0 11-1.266-.003V3.4c0-.348.283-.632.632-.632h3.128a.633.633 0 11.003 1.267L4.803 4.03l2.945 2.945a.633.633 0 010 .894z"
+                        fill="#53627C"></path>
+                      <rect stroke="#222" stroke-width="1.5" width="16" height="16" rx="3.2"></rect>
+                    </g>
+                  </svg>
+                </div>
+                <span *ngIf="isSubmitted && errorControl.sqm.errors?.required">*</span>
+                <input class="custom-font" type="number" step="any" formControlName="sqm" placeholder="Sqm"
+                  style="width: 60px;font-size: 22px;" />(m<sup>2</sup>)
+              </div>
+              <div class="normal-input ion-flex ion-align-items-center price-input" *ngIf="form.value.house_type == 'House' || form.value.house_type == 'Villa' || form.value.house_type == 'Townhouse' || form.value.house_type == 'Land' || form.value.house_type == 'Warehouse/Factory' || form.value.house_type == 'Hotel' ">
+                <div class="icon">
+                  <svg id="icon-area" viewBox="0 0 24 24">
+                    <g transform="translate(4 4)" fill="none" fill-rule="evenodd">
+                      <path
+                        d="M8.205 8.327a.633.633 0 01.894 0l2.945 2.945-.003-1.605a.633.633 0 111.266.002v3.128a.633.633 0 01-.632.632H9.547a.633.633 0 11-.003-1.267l1.606.004-2.945-2.945a.633.633 0 010-.894zm-.457-.457a.633.633 0 01-.894 0L3.909 4.925l.003 1.606a.633.633 0 11-1.266-.003V3.4c0-.348.283-.632.632-.632h3.128a.633.633 0 11.003 1.267L4.803 4.03l2.945 2.945a.633.633 0 010 .894z"
+                        fill="#53627C"></path>
+                      <rect stroke="#222" stroke-width="1.5" width="16" height="16" rx="3.2"></rect>
+                    </g>
+                  </svg>
+                </div>
+                <span *ngIf="isSubmitted && errorControl.area.errors?.required">*</span>
+                <input class="custom-font" type="number" step="any" formControlName="area" placeholder="Land sqm"
+                  style="width: 80px;font-size: 22px;" />(m<sup>2</sup>)
+              </div>
+            </div>
+            <h4 class="title ion-margin-top">Location</h4>
+
+            <ion-row class="ion-margin-top ion-no-padding">
+              <ion-col class="ion-no-padding">
+                <div class="normal-input ion-flex ion-align-items-center">
+                  <div>
+                    <span class="float-text" [ngClass]="{'show': form.value.province != ''}">Province</span>
+                    <span *ngIf="isSubmitted && errorControl.province.errors?.required">*</span>
+                  </div>
+                  
+                  <ion-select formControlName="province" interface="popover" placeholder="Province" (ionChange)="districts_list($event)">
+                    <ion-select-option [value]="opt.name" *ngFor="let opt of provinces">{{opt.name}}</ion-select-option>
+                  </ion-select>
+                </div>
+              </ion-col>
+
+              <ion-col class="ion-no-padding">
+                <div class="normal-input ion-flex ion-align-items-center">
+                  <div>
+                    <span class="float-text" [ngClass]="{'show': form.value.district != ''}">District</span>
+                    <span *ngIf="isSubmitted && errorControl.district.errors?.required">*</span>
+                  </div>
+                  <ion-select formControlName="district" interface="popover" placeholder="District"
+                    (ionChange)="district_cities_list($event)">
+                    <ion-select-option [value]="opt.name" *ngFor="let opt of districts">{{opt.name}}</ion-select-option>
+                  </ion-select>
+                </div>
+              </ion-col>
+
+              <ion-col class="ion-no-padding">
+                <div class="normal-input ion-flex ion-align-items-center">
+                  <div>
+                    <span class="float-text" [ngClass]="{'show': form.value.district_city != ''}">District City</span>
+                    <span *ngIf="isSubmitted && errorControl.district_city.errors?.required">*</span>
+                  </div>
+                  <ion-select formControlName="district_city" interface="popover" placeholder="Sub Districts">
+                    <ion-select-option [value]="opt.name" *ngFor="let opt of district_cities">{{opt.name}}
+                    </ion-select-option>
+                  </ion-select>
+                </div>
+              </ion-col>
+
+            </ion-row>
+
+            <ion-row class="ion-margin-top">
+              <ion-col class="ion-no-padding">
+                <div class="normal-input ion-flex ion-align-items-center">
+                  <div>
+                    <span class="float-text" [ngClass]="{'show': form.value.address != ''}">Listing Address</span>
+                    <span *ngIf="isSubmitted && errorControl.address.errors?.required">*</span>
+                  </div>
+                  <input type="text" formControlName="address" placeholder="Listing Address" />
+                </div>
+              </ion-col>
+              
+
+              <ion-col class="ion-no-padding" *ngIf="form.value.province == 'Bangkok' ">
+                <div class="normal-input ion-flex ion-align-items-center">
+                  <div>
+                    <span class="float-text" [ngClass]="{'show': form.value.station != ''}">Stations</span>
+                    <span *ngIf="isSubmitted && errorControl.station.errors?.required">*</span>
+                  </div>
+                  <ion-select formControlName="station" interface="popover" placeholder="Stations">
+                    <ion-select-option [value]="opt" *ngFor="let opt of stations">{{opt}}</ion-select-option>
+                  </ion-select>
+                </div>
+
+              </ion-col>
+
+            </ion-row>
+
+
+            <div class="google-map-wrap mb-25">
+              <div class="gmap">
+                <google-map [options]="googleOptions" (mapClick)="eventHandler($event,'mapClick')" height="250px"
+                  width="100%">
+                  <map-marker #markerElem="mapMarker" *ngFor="let marker of markers" [position]="marker.position"
+                    [label]="marker.label" [title]="marker.title" [options]="marker.options">
+                  </map-marker>
+                </google-map>
+              </div>
+              <input type="hidden" formControlName="lat" />
+              <input type="hidden" formControlName="lng" />
+            </div>
+            <p>Please click on the map to drop the pin at the accurate location</p>
+
+            <h4 class="title ion-margin-top">Property Features</h4>
+
+            <ion-row>
+              <ion-col class="ion-no-padding"
+                *ngIf="form.value.house_type == 'Condominium' || form.value.house_type == 'House' || form.value.house_type == 'Townhouse' ">
+                <div class="normal-input ion-flex ion-align-items-center">
+                  <div>
+                    <span class="float-text" [ngClass]="{'show': form.value.furnishing != ''}">Furnishing</span>
+                    <span *ngIf="isSubmitted && errorControl.furnishing.errors?.required">*</span>
+                  </div>
+                  <ion-select formControlName="furnishing" interface="popover" placeholder="Furnishing">
+                    <ion-select-option [value]="furn" *ngFor="let furn of furnishing_arr">{{furn}}</ion-select-option>
+                  </ion-select>
+                </div>
+              </ion-col>
+
+              <ion-col class="ion-no-padding"
+                *ngIf="form.value.house_type == 'House' || form.value.house_type == 'Townhouse' ">
+                <div class="normal-input ion-flex ion-align-items-center">
+                  <div>
+                    <span class="float-text" [ngClass]="{'show': form.value.floors != ''}">Floors</span>
+                    <span *ngIf="isSubmitted && errorControl.floors.errors?.required">*</span>
+                  </div>
+                  <input type="number" formControlName="floors" placeholder="Floors" />
+                </div>
+
+              </ion-col>
+              <ion-col class="ion-no-padding"
+                *ngIf="form.value.house_type == 'Condominium' || form.value.house_type == 'Commercial' ">
+                <div class="normal-input ion-flex ion-align-items-center">
+                  <div>
+                    <span class="float-text" [ngClass]="{'show': form.value.floor != ''}">Floor #</span>
+                    <span *ngIf="isSubmitted && errorControl.floor.errors?.required">*</span>
+                  </div>
+                  <input type="number" formControlName="floor" placeholder="Floor #" />
+                </div>
+              </ion-col>
+
+              <ion-col class="ion-no-padding">
+                <div class="normal-input ion-flex ion-align-items-center">
+                  <div>
+                    <span class="float-text" [ngClass]="{'show': form.value.year_built != ''}">Year Built</span>
+                    <span *ngIf="isSubmitted && errorControl.year_built.errors?.required">*</span>
+                  </div>
+                  <ion-select formControlName="year_built" interface="popover" placeholder="Year Built">
+                    <ion-select-option [value]="yeear" *ngFor="let yeear of yearslist">{{yeear}}</ion-select-option>
+                  </ion-select>
+                </div>
+              </ion-col>
+
+              <ion-col class="ion-no-padding ion-d-none">
+                <div class="normal-input ion-flex ion-align-items-center">
+                  <span *ngIf="isSubmitted && errorControl.start_date.errors?.required">*</span>
+                  <input type="text" formControlName="start_date" placeholder="Listing Date"
+                    (click)="open_popover_modal()" />
+                </div>
+              </ion-col>
+
+            </ion-row>
+
+            
+
+            <ion-button class="ion-no-padding ion-no-margin btn-no-background" color="primary" fill="clear"
+              (click)="popupFeatuers()"
+              *ngIf="!form.value.additional_features || (form.value.additional_features && form.value.additional_features.length === 0)">
+              <ion-icon name="add-circle"></ion-icon>
+              add a feature
+            </ion-button>
+
+            <ion-button class="ion-no-padding ion-no-margin btn-no-background" color="primary" fill="clear"
+              (click)="popupFeatuers()"
+              *ngIf="form.value.additional_features && form.value.additional_features.length > 0">
+              <ion-icon name="remove-circle"></ion-icon>
+              edit features
+            </ion-button>
+
+            <ion-select formControlName="additional_features" placeholder="Features" multiple="true"
+              style="display: none;" #featurebox>
+              <ion-select-option [value]="fe.name" *ngFor="let fe of features">{{fe.name}}</ion-select-option>
+            </ion-select>
+
+            <div class="ion-flex inline-round-box ion-margin-top features mb-25"
+              *ngIf="form.value.additional_features && form.value.additional_features.length > 0">
+
+              <div class="checkboxs " *ngFor="let fe of form.value.additional_features">
+                <input type="checkbox" id="feature-{{fe.replace(' ', '-') | lowercase}}" [value]="fe" checked />
+                <label for="feature-{{fe.replace(' ', '-') | lowercase}}"
+                  class="custom {{feslug(fe) | lowercase}}-select"></label>
+                  <span class="feature-name">{{fe}}</span>
+              </div>
+
+            </div>
+
+            <h4 class="title ion-margin-top">Property Description</h4>
+            <div class="normal-input ion-flex ion-align-items-center">
+              <span *ngIf="isSubmitted && errorControl.description.errors?.required">*</span>
+              <ion-textarea formControlName="description" rows="1" [autoGrow]="true"
+                placeholder="include as much details as possible here about this listing"></ion-textarea>
+            </div>
+
+            <div class="ion-flex ion-align-items-center">
+              <ion-button size="small" class="ion-no-padding ion-no-margin btn-no-background" color="primary"
+                fill="clear" (click)="toggleThaiDesc()" *ngIf="!thai_description"
+                style="font-size: 11px; text-transform: capitalize;">
+                add thai description
+                <img src="/assets/flag.png" alt="" style="width: 15px; margin-left: 4px;"/>
+              </ion-button>
+
+              <ion-button size="small" class="ion-no-padding ion-no-margin btn-no-background" color="primary"
+                fill="clear" (click)="toggleThaiDesc()" *ngIf="thai_description"
+                style="font-size: 11px; text-transform: capitalize;">
+                hide thai description
+                <img src="/assets/flag.png" alt="" style="width: 15px; margin-left: 4px;"/>
+              </ion-button>
+
+              <ion-button size="small" class="ion-no-padding ion-no-margin btn-no-background ion-margin-start"
+                color="primary" fill="clear" (click)="autoGenerateDesc()"
+                style="font-size: 11px; text-transform: capitalize;">
+                Auto generate description
+                <img src="/assets/refresh.png" alt="" style="width: 15px; margin-left: 4px;"/>
+              </ion-button>
+
+            </div>
+
+
+
+            <div class="normal-input" *ngIf="thai_description">
+              <ion-textarea formControlName="description_th" [autoGrow]="true" rows="1"
+                placeholder="กรุณาใส่ข้อมูลให้มากที่สุด"></ion-textarea>
+            </div>
+
+            <h4 class="title ion-margin-top">Listing Source</h4>
+
+            <div class="normal-input ion-flex ion-align-items-center ion-margin-top">
+              <div>
+                <span class="float-text" [ngClass]="{'show': form.value.listing_source_type != ''}">Source Types</span>
+              </div>
+              <ion-select formControlName="listing_source_type" interface="popover" placeholder="Source Types">
+                <ion-select-option [value]="source_t" *ngFor="let source_t of listing_sources_types">{{source_t}}</ion-select-option>
+              </ion-select>
+            </div>
+
+            <div class="ion-margin-top mb-25" formGroupName="contact_info" *ngIf="form.value.listing_source_type != ''">
+
+              <ion-row class="ion-margin-top">
+                <ion-col class="ion-no-padding">
+                  <div class="normal-input ion-flex ion-align-items-center">
+                    <div>
+                      <span class="float-text" [ngClass]="{'show': form.get('contact_info').value.firstname != ''}">Name</span>
+                      <span *ngIf="isSubmitted && !errorControlContact.get('firstname').valid">*</span>
+                    </div>
+                    <input type="text" formControlName="firstname" placeholder="Name" />
+                  </div>
+                </ion-col>
+
+                <ion-col class="ion-no-padding" *ngIf="form.value.listing_source_type == 'Co-agent Listing' ">
+                  <div class="normal-input ion-flex ion-align-items-center">
+                    <div>
+                      <span class="float-text" [ngClass]="{'show': form.get('contact_info').value.agency != ''}">Agency Name</span>
+                      <span *ngIf="isSubmitted && !errorControlContact.get('agency').valid">*</span>
+                    </div>
+                    <input placeholder="Agency Name" formControlName="agency" type="text" />
+                  </div>
+                </ion-col>
+
+                <ion-col class="ion-no-padding ion-d-none">
+                  <div class="normal-input ion-flex ion-align-items-center">
+                    <div>
+                      <span class="float-text" [ngClass]="{'show': form.get('contact_info').value.lastname != ''}">Last Name</span>
+                      <span *ngIf="isSubmitted && !errorControlContact.get('lastname').valid">*</span>
+                    </div>
+                    <input type="text" formControlName="lastname" placeholder="Last Name" />
+                  </div>
+                </ion-col>
+
+              </ion-row>
+  
+              <ion-row class="ion-margin-top">
+                <ion-col class="ion-no-padding">
+                  <div class="normal-input ion-flex ion-align-items-center">
+                    <div>
+                      <span class="float-text" [ngClass]="{'show': form.get('contact_info').value.email != ''}">Email</span>
+                      <span *ngIf="isSubmitted && !errorControlContact.get('email').valid">*</span>
+                    </div>
+                    <input placeholder="Email" formControlName="email" type="email" />
+                  </div>
+                </ion-col>
+                <ion-col class="ion-no-padding">
+                  <div class="normal-input ion-flex ion-align-items-center">
+                    <div>
+                      <span class="float-text" [ngClass]="{'show': form.get('contact_info').value.phone != ''}">Phone</span>
+                      <span *ngIf="isSubmitted && !errorControlContact.get('phone').valid">*</span>
+                    </div>
+                    <input placeholder="Phone" formControlName="phone" type="text" />
+                  </div>
+                </ion-col>
+                <ion-col class="ion-no-padding">
+                  <div class="normal-input ion-flex ion-align-items-center">
+                    <div>
+                      <span class="float-text" [ngClass]="{'show': form.get('contact_info').value.line_id != ''}">Line</span>
+                      <span *ngIf="isSubmitted && !errorControlContact.get('line_id').valid">*</span>
+                    </div>
+                    <input placeholder="Line" formControlName="line_id" type="text" />
+                  </div>
+                </ion-col>
+              </ion-row>
+
+              
+
+              <!-- <ion-label position="floating">Contacts</ion-label>
+                <ionic-selectable #clentComponent formControlName="contact_id" [items]="contacts" itemValueField="id"
+                  itemTextField="name" [canSearch]="true" (onChange)="contactChange($event)"
+                  (onSearch)="searchContacts($event)">
+                </ionic-selectable> -->
+  
+  
+            </div>
+
+
+            <h4 class="title ion-margin-top">More</h4>
+
+            <div class="normal-input ion-flex ion-align-items-center">
+              <span *ngIf="isSubmitted && errorControl.ref_id.errors?.required">*</span>
+              <input type="url" formControlName="ref_id" placeholder="Ref. Id" />
+            </div>
+
+
+            <div class="normal-input ion-flex ion-align-items-center">
+              <span *ngIf="isSubmitted && errorControl.youtube_link.errors?.required">*</span>
+              <input type="url" formControlName="youtube_link" placeholder="Youtube Url" />
+            </div>
+
+            <div class="action-button-groups" style="margin-top: 40px; margin-bottom: 60px;" >
+              <ion-button type="submit" color="success" shape="round" class="ion-no-margin ion-text-capitalize">Publish</ion-button>
+              <ion-button type="button" color="tertiary" shape="round" class="ion-no-margin ion-margin-start ion-text-capitalize" (click)="save_draft()">Save as Draft</ion-button>
+            </div>
+
+            
+
+          </ion-col>
+
+          <ion-col class="5">
+            
+            <div *ngIf="form.value.house_type === 'Condominium' || form.value.house_type === 'House' ">
+              <h4 class="title">Project</h4>
+              <div class="normal-input ion-flex ion-align-items-center">
+                <div>
+                  <span class="float-text" [ngClass]="{'show': form.value.building != ''}">Projects</span>
+                  <span *ngIf="isSubmitted && errorControl.building.errors?.required">*</span>
+                </div>
+                <ionic-selectable modalCssClass="listing-member-search" placeholder="Projects" searchPlaceholder="Search by projects" formControlName="building" [items]="buildings"
+                  itemValueField="id" itemTextField="name" [canSearch]="true" (onChange)="buildingsChange($event)"
+                  (onSearch)="searchBuildings($event)">
+
+                  <ng-template ionicSelectableCloseButtonTemplate>
+                    <ion-icon name="close-outline" style="font-size: 24px;"></ion-icon>
+                  </ng-template>
+
+                </ionic-selectable>
+                
+              </div>
+            </div>
+
+            <h4 class="title">Listing Contact</h4>
+
+            <div class="listing-agent-wrap" *ngIf="selectedMembers">
+              <div class="listing-agent-box ion-margin-bottom" *ngFor="let currentUser of selectedMembers">
+                <div class="agent-inner">
+                  <div class="agent-header">
+                    <div class="usr-info">
+                      <span class="org">{{currentUser.org_name}}</span>
+                      <img [src]="currentUser.profile_image" alt="" />
+                    </div>
+                  </div>
+                  <div class="agent-body">
+                    <div class="name">{{currentUser.firstname}} {{currentUser.lastname}}</div>
+                    <div>{{currentUser.email}}</div>
+                    <div>{{currentUser.phonenumber}}</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <ion-button size="small" class="ion-no-padding ion-no-margin btn-no-background ion-margin-start"
+                color="primary" fill="clear" (click)="openMemberBox()"
+                style="font-size: 11px; text-transform: capitalize;">
+                Edit Contact
+            </ion-button>
+
+
+            <ion-item style="display: none;">
+              <ionic-selectable modalCssClass="listing-member-search" #memberComponent [isMultiple]="true" searchPlaceholder="Search agents by name" formControlName="project_member_ids"
+                [items]="members" itemValueField="staffid" itemTextField="name" [canSearch]="true" confirmButtonText="Save"
+                (onSearch)="searchMembers($event)" (onChange)="changeMembers($event)" [isConfirmButtonEnabled]="memberComponent.itemsToConfirm.length <= 3" [disabledItems]="disableMember" >
+                <ng-template ionicSelectableMessageTemplate>
+                  Select max 3 items.
+                </ng-template>
+
+                <ng-template ionicSelectableCloseButtonTemplate>
+                  <ion-icon name="close-outline" style="font-size: 24px;"></ion-icon>
+                </ng-template>
+
+              </ionic-selectable>
+            </ion-item>
+
+          </ion-col>
+        </ion-row>
+
+
+      </div>
+    </div>
+
+    
+
+    
+
+    <input type="hidden" formControlName="random_string" value="" />
+    <input type="hidden" formControlName="status" value="" />
+
+  </form>
+
+
+
+
+</ion-content>
+<ion-modal id="dateModel" [isOpen]="isPopoverOpen" (willDismiss)="isPopoverOpen = false">
+  <ng-template>
+    <ion-content>
+      <ion-datetime presentation="date" [(ngModel)]="formDate" [showDefaultButtons]="true"></ion-datetime>
+    </ion-content>
+  </ng-template>
+</ion-modal>
+<ion-modal id="listing-gallery-modal" #modal trigger="gallery-modal">
+  <ng-template>
+    <div class="wrapper gallery-box">
+      <div class="title" style="margin-bottom: 0;">Gallery </div>
+      <p class="ion-no-margin" style="margin: 5px 0;"><small>Click on any image to make it featured</small></p>
+      <div class="file-upload-wrap-with-reorder ion-margin-top">
+        <div class="files-upload-box">
+
+          <div class="add-file-wrap">
+            <ngx-sortable id="files-grid" class="files-grid" [sortablejs]="files" [sortablejsOptions]="options">
+
+              <div class="file-box" *ngFor="let file of files; let i = index" [class.draggable]="isDraggable(true)">
+                <div class="remove-img" (click)="removeFile(i)">
+                  <ion-icon name="close-outline"></ion-icon>
+                </div>
+                <div class="star-img" (click)="setFeatured(i)">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="ionicon s-ion-icon" viewBox="0 0 512 512">
+                    <title>Set Featured</title>
+                    <path d="M480 208H308L256 48l-52 160H32l140 96-54 160 138-100 138 100-54-160z"
+                      stroke-linejoin="round" class="ionicon-fill-none ionicon-stroke-width"></path>
+                  </svg>
+                </div>
+                <img [src]="file['image']" alt="" />
+              </div>
+
+              <div class="add-new-file" (click)="mediaFile.click()" [class.draggable]="isDraggable(false)">
+                <input type="file" accept="image/*" id="mediaFile" #mediaFile multiple
+                  (change)="onSelectFile(mediaFile.files)" style="display: none;">
+                <ion-icon name="images-outline"></ion-icon>
+              </div>
+
+            </ngx-sortable>
+
+            <ion-button size="small" class="ion-no-padding ion-no-margin btn-no-background ion-margin-top"
+              color="primary" fill="clear" (click)="enableFloorPlan()"
+              style="font-size: 11px; text-transform: capitalize;">
+              I have a floor plan to upload for this property
+            </ion-button>
+
+            <div class="ion-margin-top" *ngIf="is_floor_plan">
+              <p>Upload floor plan below</p>
+              <ngx-sortable id="floorplan-grid" class="files-grid" [sortablejs]="floorFiles" [sortablejsOptions]="options">
+
+                <div class="file-box" *ngFor="let file of floorFiles; let i = index">
+                  <div class="remove-img" (click)="removeFloorFile(i)">
+                    <ion-icon name="close-outline"></ion-icon>
+                  </div>
+                  <img [src]="file['image']" alt="" />
+                </div>
+  
+                <div class="add-new-file" (click)="mediaFloorFile.click()">
+                  <input type="file" accept="image/*" id="mediaFloorFile" #mediaFloorFile multiple
+                    (change)="onSelectFloorFile(mediaFloorFile.files)" style="display: none;">
+                  <ion-icon name="images-outline"></ion-icon>
+                </div>
+  
+              </ngx-sortable>
+            </div>
+            
+
+
+
+          </div>
+
+
+
+        </div>
+
+
+      </div>
+
+
+      <div class="gallery-featured-wrap" *ngIf="featured_image" style="margin-top: 30px;">
+        <div class="title">Featured Image </div>
+
+
+
+        <div class="ion-flex ion-align-items-center">
+          <div class="featured-image">
+            <div class="file-box">
+              <img [src]="featured_image['image']" alt="" />
+            </div>
+          </div>
+          <div class="featured-note ion-margin-start">
+            <p class="ion-no-margin">This image will be shown as the preview for this listing, it should be the most
+              attractive and well-lit image available.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="ion-text-end">
+        <ion-button type="button" color="success" size="small" (click)="update_images()"
+          *ngIf="files && files.length > 0">Update</ion-button>
+
+        <ion-button type="button" color="danger" size="small" (click)="modal.dismiss()" >Close</ion-button>  
+      </div>
+
+
+    </div>
+  </ng-template>
+</ion-modal>

@@ -1,0 +1,75 @@
+ion-content {
+    // --background:#e8e8e8;
+    --background: url('/assets/login-bg.png') no-repeat bottom right / 45%;
+    .form-wrap {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        height: 100vh;
+        .form-inner {
+            width: 350px;
+            padding: 20px;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px 0 rgb(0 0 0 / 14%);
+            ion-item {
+                margin-bottom: 15px;
+            }
+            ion-button {
+                margin: 0;
+            }
+            a {
+                text-align: right;
+                display: block;
+                font-size: 14px;
+            }
+            h3 {
+                margin: 30px 0;
+            }
+            label {
+                margin-bottom: 5px;
+                display: block;
+            }
+            ion-input {
+                background: #f3f9fb;
+                margin-bottom: 15px;
+            }
+            
+        }
+    }
+}
+
+.login-btn {
+    background: #3235d6;
+    color: #fff;
+    display: block;
+    width: 70%;
+    padding: 10px 20px;
+    border-radius: 20px;
+    margin: 0 auto;
+}
+.forget-password-modal {
+    ion-item {
+        margin-bottom: 15px;
+    }
+    ion-button {
+        margin: 0;
+    }
+    a {
+        text-align: right;
+        display: block;
+        font-size: 14px;
+    }
+    h3 {
+        margin: 30px 0;
+    }
+    label {
+        margin-bottom: 5px;
+        display: block;
+    }
+    ion-input {
+        background: #f3f9fb;
+        margin-bottom: 15px;
+    }
+}

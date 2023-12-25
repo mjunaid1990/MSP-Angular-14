@@ -1,0 +1,57 @@
+<!-- <ion-header collapse="fade">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button menu="myMenu"></ion-menu-button>
+    </ion-buttons>
+    <ion-title>{{title}}</ion-title>
+  </ion-toolbar>
+</ion-header> -->
+
+<ion-header class="ion-no-border my-header">
+  <ion-toolbar>
+    <ion-searchbar show-clear-button="focus" placeholder="Search Listings & Contacts" [debounce]="1000" (ionChange)="handleChange($event)"></ion-searchbar>
+    
+    <ion-buttons slot="end">
+      <ion-button>
+        <ion-icon name="notifications-outline"></ion-icon>
+      </ion-button>
+      <ion-button>
+        <ion-icon name="help-circle-outline"></ion-icon>
+      </ion-button>
+
+      <ion-button>
+        <div class="user-avatar" (click)="toggleUserMenu()">
+            <ion-avatar>
+              <img [src]="auth.getUser().profile_image">
+            </ion-avatar>
+        </div>
+      </ion-button>
+
+    </ion-buttons>
+    
+  </ion-toolbar>
+</ion-header>
+
+<ion-menu-toggle class="custom-small-menu" auto-hide="false" *ngIf="isOpenUserMenu">
+  <ion-list lines="none" class="ion-no-padding">
+    <ion-item class="ion-no-padding" (click)="hideUserToggle()">
+      Profile
+    </ion-item>
+    <ion-item class="ion-no-padding" (click)="Logout()">
+      Logout
+    </ion-item>
+  </ion-list>
+</ion-menu-toggle>
+
+<div #insideElement class="search-results" *ngIf="search_items && search_items.length > 0">
+  <ion-list *ngFor="let sitem of search_items">
+      <ion-list-header>
+          <h4>{{sitem.name}}</h4>
+      </ion-list-header>
+      <ion-item *ngFor="let item of sitem.items" (click)="redirectTo(item.id, sitem.name)">
+          <ion-label *ngIf="sitem.name==='Leads/Contacts'">{{item.name}} - {{item.email}} - {{item.phonenumber}} - {{item.status_name}}</ion-label>
+          <ion-label *ngIf="sitem.name==='MSP ID'">#{{item.id}} - {{item.name}}</ion-label>
+      </ion-item>
+  </ion-list>
+</div>
+

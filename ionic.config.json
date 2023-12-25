@@ -1,0 +1,7 @@
+{
+  "name": "msp",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}

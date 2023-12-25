@@ -1,0 +1,145 @@
+ion-item {
+    &:hover {
+        ion-label {
+            color: #000;
+        }
+    }
+}
+
+.ion-color-medium {
+    --ion-color-contrast: unset !important;
+}
+
+.normal-input {
+    position: relative;
+    input[type=text], input[type=number], input[type=url], input[type=email], input[type=date], input[type=time], select {
+        border: 0;
+        height: 40px;
+        background: transparent;
+        width: 100%;
+        color: #222;
+        font-size: 16px;
+        font-weight: 600;
+        font-family: 'GTEestiProDisplay-Bold';
+        &:hover, &:focus {
+            .float-text {
+                opacity: 1;
+            }
+            border: 0;
+            outline: 0;
+        }
+        &::placeholder {
+            font-weight: normal;
+            color: gray;
+            opacity: .7;
+        }
+    }
+    ion-input {
+        border: 0;
+        height: 40px;
+        background: transparent;
+        width: 100%;
+        color: #222;
+        font-size: 16px;
+        font-weight: 600;
+        font-family: 'GTEestiProDisplay-Bold';
+        --padding-start: 0;
+        &:hover, &:focus {
+            .float-text {
+                opacity: 1;
+            }
+            border: 0;
+            outline: 0;
+        }
+        &::placeholder {
+            font-weight: normal;
+            color: gray;
+            opacity: .7;
+        }
+    }
+    .custom-font {
+        font-size: 24px !important;
+        &::placeholder {
+            font-size: 16px;
+        }
+    }
+    span {
+        margin-top: 3px;
+        color: var(--ion-color-danger);
+    }
+    .symb {
+        font-size: 16px;
+        margin-right: 10px;
+        color: #222;
+    }
+    .icon {
+        margin-top: 5px;
+        margin-right: 8px;
+        svg {
+            width: 22px;
+            height: 22px;
+            color: #222;
+        }
+    }
+    ion-textarea {
+        font-size: 16px;
+        color: #222;
+        font-weight: 600;
+        font-family: 'GTEestiProDisplay-Bold';
+        --placeholder-font-weight: 600;
+        --padding-start: 0;
+        --placeholder-color: gray;
+        --placeholder-opacity: .7;
+        --padding-start: 0;
+    }
+    .float-text {
+        position: absolute;
+        top: 0;
+        color: #222 !important;
+        font-size: 12px;
+        opacity: 0;
+    }
+    .float-text.show {
+        opacity: 1;
+    }
+}
+.normal-input.textarea-bg {
+    ion-textarea {
+        background-color: #f5f8fa;
+    }
+}
+.normal-input.price-input {
+    input {
+        margin-right: 5px;
+    }
+}
+.normal-input.ion-align-items-center {
+    span {
+        margin-top: -4px;
+    }
+}
+.select-small {
+    font-size: 16px;
+    --padding-start: 0;
+}
+ion-select::part(icon) {
+    display: none !important;
+}
+ion-select::part(placeholder) {
+    font-weight: normal !important;
+}
+ionic-selectable::part(placeholder) {
+    font-weight: normal !important;
+}
+ion-select, ionic-selectable {
+    --placeholder-color: gray;
+    --placeholder-opacity: .7;
+    --padding-start: 0;
+    font-weight: 600;
+    font-size: 16px;
+    color: #222;
+    font-family: 'GTEestiProDisplay-Bold';
+}
+.btn-no-background {
+    --background-hover-opacity: 0;
+}

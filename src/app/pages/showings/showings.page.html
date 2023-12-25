@@ -1,0 +1,377 @@
+
+<ion-content scrollEvents="true">
+    <app-header class="white-header" ></app-header>
+    <div class="ion-flex dashboard-design">
+        <div class="dashboard-white">
+            <ion-row class="ion-align-items-center ion-justify-content-between ion-margin-top">
+                <ion-col>
+                    <ion-text class="h2">Showings Feed</ion-text>
+                </ion-col>
+                <ion-col class="ion-text-right">
+                    <ion-button (click)="addNew()" shape="round" color="success"
+                        class="">
+                        <ion-icon name="add-outline"></ion-icon>
+                        Add Showing
+                    </ion-button>
+                </ion-col>
+            </ion-row>
+            <ion-row>
+                <ion-col size="7">
+                    <div class="status-filter">
+                        <ion-segment [value]="filter_status">
+                            <ion-segment-button [value]="status" *ngFor="let status of statuses" (click)="fetchByStatus(status)">
+                                <ion-label>{{status}}</ion-label>
+                            </ion-segment-button>
+                        </ion-segment>
+                    </div>
+                </ion-col>
+                <ion-col size="5"></ion-col>
+            </ion-row>
+            <br />
+            <ng-container *ngIf="is_loaded; else loadingBlock">
+                <div class="showings" *ngIf="lists && lists.length > 0;else noData">
+                    <div class="showing-loop" *ngFor="let item of lists; let i = index">
+                        <ion-row>
+                            <ion-col>
+                                <ion-list lines="none" class="ion-no-padding">
+                                    <ion-item class="ion-no-padding">
+                                        <ion-text color="dark" class="month-row">{{item.date}}</ion-text>
+                                    </ion-item>
+                                </ion-list>
+                            </ion-col>
+                        </ion-row>
+    
+                        <div *ngIf="item.items && item.items.length > 0">
+                            <div class="ion-flex ion-align-items-center showing-row" *ngFor="let sub of item.items; let subkey = index">
+                                <div class="date-box">
+                                    <div class="day">{{sub.start | date: 'E'}}</div>
+                                    <div class="month-name">{{sub.start | date: 'dd'}}</div>
+                                </div>
+                                <div class="time-box">
+                                    <div class="event-time ion-flex">
+                                        <ion-icon name="time"></ion-icon>
+                                        <ion-text style="text-transform: lowercase">{{sub.start | date: 'h:mm a'}}</ion-text>
+                                        <ion-text *ngIf="sub.end"> - {{sub.end | date: 'h:mm a'}}</ion-text>
+                                    </div>
+                                    <div class="event-time ion-flex" *ngIf="sub.request_status">
+                                        <ion-select interface="popover"
+                                            (ionChange)="statusChange($event, sub.eventid)" placeholder="Select Status" [value]="sub.request_status"
+                                            style="display: inline-flex; color: #3880ff; padding: 0;">
+                                            <ion-select-option [value]="sts" *ngFor="let sts of statuses">{{sts}}</ion-select-option>
+                                        </ion-select>
+                                    </div>
+                                    
+                                </div>
+                                <div class="people-box">
+                                    <div class="lead-name">{{sub.lead_name}}</div>
+                                    <div class="prop_type" *ngIf="sub.project && sub.project.prop_type">
+                                        <span>{{sub.project.prop_type}}</span>
+                                    </div>
+                                </div>
+
+                                <div class="people-box">
+                                    <div class="assigned-name">Assigned Agents</div>
+                                    <div class="avatar-container" *ngIf="sub.assignee && sub.assignee.length > 0">
+                                        <div class="avatar-item" *ngFor="let assign of sub.assignee">
+                                            <img [src]="assign" alt="" />
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="action-button-groups">
+                                    <ion-button type="button" color="primary" size="small" shape="round" (click)="toggleActionMenu(i, subkey, sub)" style="font-size: 10px;">
+                                        Edit
+                                        <ion-icon slot="end" name="caret-down-outline" *ngIf="!sub.toggle"></ion-icon>
+                                        <ion-icon slot="end" name="caret-up-outline" *ngIf="sub.toggle"></ion-icon>
+                                      </ion-button>
+                        
+                                      <ion-menu-toggle class="action-menu" auto-hide="false" *ngIf="sub.toggle">
+                                        <ion-button type="button" color="dark" fill="clear" class="ion-no-padding ion-no-margin btn-no-background ion-margin-start" (click)="editRow(sub.eventid)">Edit Showing</ion-button>
+                                        <ion-button type="button" color="dark" fill="clear" class="ion-no-padding ion-no-margin btn-no-background ion-margin-start" (click)="cancelRow(sub.eventid)">Cancel Showing</ion-button>
+                                      </ion-menu-toggle>
+                                </div>
+                                
+    
+                            </div>
+                        </div>
+                        <table class="table custom-table">
+                        <tbody *ngIf="lists && lists.length === 0">
+                            <tr class="item-row">
+                                <td colspan="8" style="padding-left: 0">
+                                    <p style="color: gray; font-family: 'GTEestiProDisplay-Regular';">No results found</p>
+                                </td>
+                            </tr>
+                        </tbody>
+                        </table>
+    
+                    </div>
+                    
+                    <ion-row class="ion-align-items-center ion-justify-content-between ion-margin-top">
+                        <ion-col class="ion-flex ion-justify-content-start">
+                            <pagination-controls previousLabel="Prev" nextLabel="Next" (pageChange)="pageChangeEvent($event)"
+                                *ngIf="lists && lists.length > 1">
+                            </pagination-controls>
+                        </ion-col>
+                        <ion-col class="ion-flex ion-justify-content-end">
+                            <div *ngIf="lists && lists.length > 0">
+                                {{p * limit - 19}} - {{p * limit}} of {{total}}
+        
+                            </div>
+                        </ion-col>
+        
+                    </ion-row>
+    
+                </div>
+                <ng-template #noData>
+                    <div class="showing">
+                        <p>No showing found</p>
+                    </div>
+                </ng-template>
+            </ng-container>
+
+            <ng-template #loadingBlock>
+                <table class="table custom-table">
+                    <tbody>
+                        <tr *ngFor="let sk of skeletons">
+                            <td>
+                                <ion-skeleton-text [animated]="true" style="width: 200px;"></ion-skeleton-text>
+                            </td>
+                            <td>
+                                <ion-skeleton-text [animated]="true"></ion-skeleton-text>
+                            </td>
+                            <td>
+                                <ion-skeleton-text [animated]="true"></ion-skeleton-text>
+                            </td>
+                            <td>
+                                <ion-skeleton-text [animated]="true"></ion-skeleton-text>
+                            </td>
+                            
+                            
+                        </tr>
+                    </tbody>
+                </table>
+                
+            </ng-template>
+
+            
+
+        </div>
+    </div>
+
+</ion-content>
+<ion-popover trigger="date" size="cover">
+    <ng-template>
+        <ion-calendar [(ngModel)]="dateRange" [options]="optionsRange" [type]="type" (change)="onChange($event)"
+            [format]="'YYYY-MM-DD'">
+        </ion-calendar>
+    </ng-template>
+</ion-popover>
+
+
+<ion-modal id="dateModel" [isOpen]="isPopoverOpen" (willDismiss)="isPopoverOpen = false">
+    <ng-template>
+        <ion-content>
+            <ion-datetime
+            presentation="date"
+            [(ngModel)]="formDate"
+            [showDefaultButtons]="true"
+          ></ion-datetime>
+        </ion-content>
+      
+    </ng-template>
+  </ion-modal>
+
+  <ion-modal id="timeModel" [isOpen]="isTimePopoverOpen" (willDismiss)="isTimePopoverOpen = false">
+    <ng-template>
+        <ion-content>
+            <ion-datetime
+            presentation="time"
+            [(ngModel)]="formTime"
+            [showDefaultButtons]="true"
+          ></ion-datetime>
+        </ion-content>
+      
+    </ng-template>
+  </ion-modal>
+
+<!-- add/edit showing modal -->
+
+<ion-modal class="showing-modal" #modal [isOpen]="isFormModalOpen"  (willDismiss)="onWillDismiss($event)">
+    <ng-template class="ion-padding">
+
+        <div class="ion-padding">
+
+            <div class="close-btn-listing ion-text-right" id="closeFormModel" (click)="closeFormModal()">
+                <ion-icon name="close-outline"></ion-icon>
+              </div>
+          
+              <ion-text class="title ion-text-center ion-block">Add Showing</ion-text>
+          
+              <form [formGroup]="form" (ngSubmit)="submitForm()">
+          
+                <ion-grid>
+          
+          
+          
+                    <ion-row>
+                        <ion-col>
+    
+                            <div class="normal-input ion-flex ion-align-items-center">
+                                <div>
+                                  <span class="float-text" [ngClass]="{'show': form.value.event_property_id != ''}">Property</span>
+                                  <span *ngIf="isSubmitted && errorControl.event_property_id.errors?.required">*</span>
+                                </div>
+                                <ionic-selectable
+                                    placeholder="Property"
+                                    formControlName="c_property_id"
+                                    [items]="properties"
+                                    itemValueField="id"
+                                    itemTextField="name"
+                                    [canSearch]="true"
+                                    (onChange)="propertyChange($event)"
+                                    (onSearch)="searchProperties($event)"
+                                    >
+                                </ionic-selectable>
+                              </div>
+    
+                          
+                        </ion-col>
+                        
+                      </ion-row>
+          
+                      <ion-row>
+                          <ion-col>
+    
+                            <div class="normal-input ion-flex ion-align-items-center">
+                                <div>
+                                  <span class="float-text" [ngClass]="{'show': form.value.event_contact_id != ''}">Contacts</span>
+                                  <span *ngIf="isSubmitted && errorControl.event_contact_id.errors?.required">*</span>
+                                </div>
+                                <ionic-selectable
+                                    placeholder="Contacts"
+                                    formControlName="c_contact_id"
+                                    [items]="contacts"
+                                    itemValueField="id"
+                                    itemTextField="name"
+                                    [canSearch]="true"
+                                    (onChange)="contactChange($event)"
+                                    (onSearch)="searchContacts($event)"
+                                    >
+                                </ionic-selectable>
+                              </div>
+    
+                          </ion-col>
+                          
+                        </ion-row>
+
+                        <ion-row>
+                            <ion-col>
+                                <div class="normal-input ion-flex ion-align-items-center">
+                                    <div>
+                                      <span class="float-text" [ngClass]="{'show': form.value.event_staff != ''}">Agent(s)</span>
+                                      <span *ngIf="isSubmitted && errorControl.event_staff.errors?.required">*</span>
+                                    </div>
+                                    <ion-select formControlName="event_staff" interface="popover" placeholder="Select..." (ionChange)="changeStaff($event)"  [multiple]="true">
+                                        <ion-select-option [value]="opt.staffid" *ngFor="let opt of staff">{{opt.firstname}} {{opt.lastname}}</ion-select-option>
+                                    </ion-select>
+                                </div>
+                                
+                            </ion-col>
+                            <ion-col class="ion-d-none">
+                                <ion-item fill="outline" color="medium">
+                                    <ion-label position="floating">Notifications</ion-label>
+                                    <ion-input formControlName="reminder_before" type="number"></ion-input>
+                                  </ion-item>
+                            </ion-col>
+                            <ion-col class="ion-d-none">
+                                <ion-item fill="outline" color="medium">
+                                    <ion-label position="floating"></ion-label>
+                                    <ion-select formControlName="reminder_before_type" placeholder="Select...">
+                                      <ion-select-option value="minutes">Minutes</ion-select-option>
+                                      <ion-select-option value="hours">Hours</ion-select-option>
+                                      <ion-select-option value="days">Days</ion-select-option>
+                                      <ion-select-option value="weeks">Weeks</ion-select-option>
+                                    </ion-select>
+                                  </ion-item>
+                            </ion-col>
+                        </ion-row>
+                        <ion-button type="button" size="small" class="ion-no-padding btn-no-background"
+                            color="primary" fill="clear" (click)="ShowNote()"
+                            style="font-size: 11px; text-transform: capitalize;">
+                            <ion-icon name="add-circle"></ion-icon>
+                            Add Note
+                        </ion-button>
+                        <ion-row *ngIf="isShowNote">
+                            <ion-col>
+                                <div class="normal-input ion-flex ion-align-items-center" [ngClass]="{'textarea-bg': form.value.feedback != ''}">
+                                    <div>
+                                      <span class="float-text" [ngClass]="{'show': form.value.feedback!= ''}">Note</span>
+                                      <span *ngIf="isSubmitted && errorControl.feedback.errors?.required">*</span>
+                                    </div>
+                                    <ion-textarea formControlName="feedback" placeholder="Note" rows="1"></ion-textarea>
+                                </div>
+                            </ion-col>
+                            <ion-col>
+                                <div class="normal-input ion-flex ion-align-items-center">
+                                    <div>
+                                      <span class="float-text" [ngClass]="{'show': form.value.feedback_type!= ''}">Type</span>
+                                      <span *ngIf="isSubmitted && errorControl.feedback_type.errors?.required">*</span>
+                                    </div>
+                                    <ion-select formControlName="feedback_type" interface="popover" placeholder="Select..." style="margin-top: 8px;">
+                                        <ion-select-option value="public">Public</ion-select-option>
+                                        <ion-select-option value="private">Private</ion-select-option>
+                                    </ion-select>
+                                </div>
+                            </ion-col>
+                        </ion-row>
+                  
+                    <ion-row>
+                        <ion-col>
+                            <div class="normal-input ion-flex ion-align-items-center">
+                                <div>
+                                  <span class="float-text" [ngClass]="{'show': form.value.start != ''}">Date</span>
+                                  <span *ngIf="isSubmitted && errorControl.start.errors?.required">*</span>
+                                </div>
+                                <input formControlName="start" type="date" placeholder="Date" />
+                            </div>
+                            
+                        </ion-col>
+                        <ion-col>
+                            <div class="normal-input ion-flex ion-align-items-center">
+                                <div>
+                                  <span class="float-text" [ngClass]="{'show': form.value.start_time != ''}">Time</span>
+                                  <span *ngIf="isSubmitted && errorControl.start_time.errors?.required">*</span>
+                                </div>
+                                <input formControlName="start_time" type="time" placeholder="Time" />
+                            </div>
+                        </ion-col>
+                    </ion-row>
+
+                    
+
+                    
+
+
+                    
+          
+          
+                </ion-grid>
+          
+                <br />
+                <br />
+                <div class="text-center">
+                  <ion-button shape="round" type="submit" class="login-btn">Submit</ion-button>
+                </div>
+          
+          
+          
+              </form>
+
+        </div>
+
+        
+    
+      </ng-template>
+  </ion-modal>
+
+

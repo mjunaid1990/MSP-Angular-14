@@ -1,0 +1,75 @@
+
+<ion-content>
+  <div class="form-wrap">
+    
+    
+
+      <div class="form-inner">
+
+        
+
+        <ion-text color="success" class="text-center">
+          <h1><img src="/assets/flypplogogreen.svg" alt="" style="height:35px;"  /></h1>
+        </ion-text>
+    
+        <ion-text color="dark" class="text-center">
+          <h3>Log in to your account</h3>
+        </ion-text>
+
+        <form [formGroup]="loginForm" (ngSubmit)="submitForm()" novalidate>
+          <label>E-mail</label>
+          <ion-input formControlName="email" type="email" placeholder="Email"></ion-input>
+          
+          <span class="error ion-padding" *ngIf="isSubmitted && errorControl.email.errors?.required">
+            Email is required.
+          </span>
+          <label>Password</label>
+          <ion-input formControlName="password" type="password" placeholder="Password"></ion-input>
+          
+          <span class="error ion-padding" *ngIf="isSubmitted && errorControl.password.errors?.required">
+            Password is required.
+          </span>
+
+          <a id="open-modal" href="javascript:void(0);" class="text-right">Forgot Password?</a>
+          <br />
+          <br />
+          <!-- <ion-button type="submit" color="success" expand="block">Submit</ion-button> -->
+          <button type="button" class="login-btn" *ngIf="isSubmitted">Submitting...</button>
+          <button type="submit" class="login-btn" *ngIf="!isSubmitted">Log In</button>
+          
+        </form>
+      </div>
+  </div>
+
+
+</ion-content>
+
+<ion-modal trigger="open-modal" class="forget-password-modal">
+  <ng-template>
+    <div class="close-btn-listing ion-text-right" (click)="closeModel()">
+      <ion-icon name="close-outline"></ion-icon>
+  </div>
+    
+    <div class="ion-padding">
+      <ion-text color="dark" class="text-center">
+        <h3>Forget Password</h3>
+      </ion-text>
+      <h5 class="ion-no-margin ion-margin-bottom" style="font-size: 14px;">To reset your password, enter the email address you use to sign in to MarketShare Pro</h5>
+
+      <form [formGroup]="forgetPasswordForm" (ngSubmit)="submitForgetForm()" novalidate>
+        <label>E-mail</label>
+        <ion-input formControlName="email" type="email" placeholder="Email"></ion-input>
+        
+        <span class="error" *ngIf="isSubmitted && errorControlForget.email.errors?.required">
+          Email is required.
+        </span>
+        <br />
+        <br />
+        <!-- <ion-button type="submit" color="success" expand="block">Submit</ion-button> -->
+        <button type="submit" class="login-btn">Submit</button>
+        
+        
+      </form>
+    </div>
+  </ng-template>
+</ion-modal>

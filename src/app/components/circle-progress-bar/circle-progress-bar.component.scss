@@ -1,0 +1,47 @@
+
+.mycirclebar {
+    height: 130px;
+    width: 130px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    position: relative;
+    margin-bottom: 15px;
+    transform: rotate(85deg);
+    .dot {
+        position: absolute;
+        width: 16px;
+        height: 16px;
+        background: #fff;
+        top: 26px;
+        left: 0;
+        transform: rotate(85deg);
+        border-radius: 50%;
+        border: 5px solid #a3c588;
+    }
+  }
+  
+  #progress-value {
+    display: block;
+    height: calc(100% - 6px);
+    width: calc(100% - 6px);
+    background-color: #f8f8f8;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    font-weight: 600;
+    font-size: 20px;
+  }
+  .display-value {
+    position: absolute;
+    width: 70%;
+    height: 70%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #fff;
+    border-radius: 100%;
+    font-size: 20px;
+    color: #222;
+    transform: rotate(-85deg);
+}

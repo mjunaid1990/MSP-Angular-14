@@ -1,0 +1,561 @@
+ion-content {
+
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6,
+    p,
+    div,
+    span,
+    a,
+    ion-item,
+    ion-button {
+        font-family: 'GTEestiProDisplay-Bold';
+    }
+
+    h4,
+    h6 {
+        color: #333;
+    }
+
+    h3 {
+        color: #3e3e3e;
+    }
+
+    .dashboard-design  {
+        .dashboard-left {
+            width: 25%;
+        }
+        .dashboard-center {
+            width: 45%;
+            background: #f5f8fa;
+            padding: 35px 25px;
+        }
+        .dashboard-right {
+            width: 30%;
+        }
+    }
+
+    .lead-contact-info {
+        .ion-flex {
+            div {
+                color: #5a5a5a;
+            }
+        }
+    }
+
+    .log-loop {
+        h6 {
+            margin-top: 0;
+            line-height: 1;
+            color: #222;
+            font-family: "GTEestiProDisplay-Regular";
+            font-size: 12px;
+            font-weight: bold;
+        }
+    }
+
+    .log-loop+.log-loop {
+        margin-top: 10px;
+    }
+
+    .top-verital-line {
+        ion-icon {
+            cursor: pointer;
+        }
+    }
+
+    .listing-box {
+        padding: 20px;
+        background: #fff;
+        border-radius: 8px;
+        margin-top: 15px;
+
+        h4 {
+            margin: 0;
+            font-size: 18px;
+        }
+
+        p {
+            margin: 0;
+            color: #444;
+            font-family: "GTEestiProDisplay-Regular";
+
+            span {
+                font-size: 13px;
+                color: #5a5a5a;
+            }
+        }
+
+        .thumbnail {
+            min-width: 80px;
+            max-width: 80px;
+            height: 80px;
+            margin-right: 10px;
+
+            img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+                border-radius: 6px;
+            }
+        }
+
+        .same-lead {
+            margin-right: 10px;
+            font-family: "GTEestiProDisplay-Regular";
+            font-size: 18px;
+        }
+
+        .ellipse {
+            display: -webkit-box;
+            -webkit-line-clamp: 1;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .info {
+            width: 100%;
+        }
+
+        .item-box {
+            position: relative;
+
+            .dot {
+                width: 3px;
+                height: 3px;
+                border-radius: 50%;
+                background: #6e6e6e;
+                display: inline-block;
+                margin-right: 6px;
+            }
+
+            .num {
+                color: #6e6e6e;
+                font-size: 12px;
+            }
+        }
+
+        .item-box+.item-box {
+            margin-left: 7px;
+        }
+    }
+
+    .log-list-wrap {
+        margin: 15px 0;
+
+        .log-list-inner {
+            margin-bottom: 16px;
+
+            .avatar {
+                width: 60px;
+                height: 50px;
+                margin-right: 15px;
+    
+                img {
+                    object-fit: cover;
+                    width: 100%;
+                    height: 100%;
+                    min-width: 60px !important;
+                    min-height: 50px;
+                    border-radius: 4px;
+                }
+            }
+            .info {
+                .name {
+                    a {
+                        font-size: 14px;
+                        color: #444;
+                        margin-bottom: 5px;
+                        display: -webkit-box;
+                        -webkit-line-clamp: 1;
+                        -webkit-box-orient: vertical;
+                        overflow: hidden;
+                        text-decoration: none;
+                    }
+                    
+                }
+            }
+            .info.ion-flex {
+                .action {
+                    width: 110px;
+                    ion-icon {
+                        cursor: pointer;
+                    }
+                }
+            }
+            .card {
+                padding: 8px;
+                border-radius: 6px;
+                background-color: #fff;
+            }
+        }
+
+        .log-message-wrap {
+            position: relative;
+            padding: 15px 20px;
+            background: #fff;
+            border-radius: 6px;
+
+            .log-message {
+                font-family: "GTEestiProDisplay-Regular";
+                color: #444;
+            }
+
+            ion-icon {
+                cursor: pointer;
+                position: absolute;
+                right: 10px;
+            }
+        }
+
+        h5 {
+            text-transform: capitalize;
+            color: #222;
+            font-family: "GTEestiProDisplay-Regular";
+            font-size: 15px;
+            margin: 0;
+            margin-bottom: 5px;
+        }
+
+    }
+
+    .lead-profile {
+        label {
+            display: block;
+            margin-bottom: 3px;
+        }
+
+        p {
+            margin: 0;
+            font-weight: normal;
+            display: inline;
+            background-color: #3bbfba;
+            color: #fff;
+            border-radius: 10px;
+            padding: 1px 8px;
+            font-size: 12px;
+        }
+        ion-col {
+            margin-bottom: 8px;
+            div {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 5px;
+            }
+        }
+    }
+
+    .similar-listing-box {
+        background: #fff;
+
+        a {
+            text-decoration: none;
+        }
+
+        .avatar {
+            width: 60px;
+            height: 50px;
+            margin-right: 15px;
+
+            img {
+                object-fit: cover;
+                width: 100%;
+                height: 100%;
+                min-width: 60px !important;
+                min-height: 50px;
+                border-radius: 4px;
+            }
+        }
+
+        .info {
+            .name {
+                a {
+                    font-size: 14px;
+                    color: #444;
+                    margin-bottom: 5px;
+                    display: -webkit-box;
+                    -webkit-line-clamp: 1;
+                    -webkit-box-orient: vertical;
+                    overflow: hidden;
+                }
+                
+            }
+
+            .features {
+                .item-box {
+                    position: relative;
+
+                    .dot {
+                        width: 3px;
+                        height: 3px;
+                        border-radius: 50%;
+                        background: #6e6e6e;
+                        display: inline-block;
+                        margin-right: 6px;
+                    }
+
+                    .num {
+                        color: #6e6e6e;
+                        font-size: 12px;
+                    }
+                }
+
+                .item-box+.item-box {
+                    margin-left: 7px;
+                }
+            }
+        }
+        .ion-listing-actions {
+            ion-icon {
+                color: #3e3e3e;
+                cursor: pointer;
+            }
+        }
+    }
+
+    .similar-listing-box+.similar-listing-box {
+        // border-top: 1px solid #dedede;
+        margin-top: 10px;
+    }
+}
+
+app-header {
+    background-image: linear-gradient(to right, transparent 57.15%, #fff 42%);
+}
+
+ion-modal {
+    .ion-color-medium {
+        --ion-color-contrast: unset !important;
+        margin-bottom: 15px;
+    }
+}
+
+.character-avatar {
+    width: 90px;
+    height: 90px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #e2e2e2;
+    border-radius: 50%;
+    margin: 0 auto;
+    font-size: 20px;
+}
+.agent-name-org {
+    h5 {
+        color: #333;
+    }
+    div {
+        font-size: 12px;
+        color: #777;
+    }
+}
+.custom-tabs {
+    position: relative;
+    background-color: #fff;
+    ul {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        align-items: center;
+        border-bottom: 1px solid #eee;
+        li {
+            padding: 8px 10px;
+            cursor: pointer;
+        }
+        li.active {
+            color: #3bbfba;
+            border-top: 3px solid #3bbfba;
+        }
+    }
+    .tab-content {
+        padding: 20px;
+        .tab {
+            display: none;
+        }
+        .tab.show {
+            display: block;
+        }
+        form {
+            .input {
+                background-color: #f5f5f5;
+                margin-top: 0;
+                color: #222;
+                font-size: 16px;
+                font-weight: 600;
+                font-family: 'GTEestiProDisplay-Bold';
+                &:hover, &:focus {
+                    .float-text {
+                        opacity: 1;
+                    }
+                    border: 0;
+                    outline: 0;
+                }
+                &::placeholder {
+                    font-weight: normal;
+                    color: #d3d3d3;
+                }
+            }
+            ion-button {
+                --background: rgb(58 57 205) !important;
+                --background-activated: rgb(58 57 205) !important;
+                --ion-color-base: rgb(58 57 205) !important;
+                text-transform: capitalize;
+            }
+        }
+    }
+}
+
+.custom-tabs-sidebar {
+    position: relative;
+    ul {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        align-items: center;
+        column-gap: 20px;
+        li {
+            cursor: pointer;
+            color: #555;
+        }
+        li.active {
+            color: #3bbfba;
+        }
+    }
+    .tab-content {
+        padding-top: 15px;
+        .tab {
+            display: none;
+        }
+        .tab.show {
+            display: block;
+        }
+        
+    }
+}
+.files-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
+    gap: 15px;
+    position: relative;
+    .file-box {
+        position: relative;
+        border: 1px solid #ccc;
+        max-height: 60px;
+        width: 100%;
+        border-radius: 10px;
+        img {
+            width: 100%;
+            object-fit: cover;
+            border-radius: 10px;
+            padding: 5px;
+            height: 60px;
+        }
+        .remove-img {
+            position: absolute;
+            right: 2px;
+            top: 2px;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid var(--ion-color-danger);
+            border-radius: 50%;
+            display: none;
+            z-index: 10;
+            color: #fff;
+            background-color: var(--ion-color-danger);
+            cursor: pointer;
+            ion-icon {
+                font-size: 18px;
+                
+            }
+        }
+        .star-img {
+            position: absolute;
+            left: 2px;
+            top: 2px;
+            background: #f0cf4c;
+            border-radius: 100%;
+            svg {
+                width: 20px;
+                height: 20px;
+                display: none;
+                z-index: 10;
+                fill: #fff;
+                cursor: pointer;
+            }
+        }
+        &:hover {
+            .remove-img, .star-img > svg {
+                display: block;
+            }
+        }
+    }
+    .add-new-file {
+        width: 100%;
+        height: 60px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: 1px dotted #eee;
+        background-color: #efefef;
+        border-radius: 8px;
+        cursor: pointer;
+        ion-icon {
+            font-size: 24px;
+            color: #201f32;
+        }
+    }
+}
+.org-logo {
+    img {
+        width: 50px;
+        height: 50px;
+        border-radius: 10px;
+        object-fit: cover;
+        margin-bottom: 20px;
+    }
+}
+.showing-inner {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    .showing-date-box {
+        margin-right: 15px;
+        text-align: center;
+        div {
+            font-size: 16px;
+        }
+        .month-name {
+            font-size: 22px;
+            color: #5a5a5a;
+        }
+        .day, .year {
+            font-family: "GTEestiProDisplay-Regular";
+            color: #222;
+        }
+        
+    }
+    .showing-info-box {
+        .name {
+            color: #3a3a3a;
+        }
+    }
+    ion-button {
+        font-family: "GTEestiProDisplay-Regular";
+    }
+}
+.org-logo {
+    img {
+        width: 160px;
+        margin-bottom: 20px;
+        height: auto;
+    }
+}
